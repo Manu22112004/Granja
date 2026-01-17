@@ -1,0 +1,589 @@
+/* =========================
+   THEME
+========================= */
+:root {
+    --malachite-50:  #f1fdf0;
+    --malachite-100: #ddfddb;
+    --malachite-200: #bdf9b9;
+    --malachite-300: #89f283;
+    --malachite-400: #44e13c;
+    --malachite-500: #25ca1d;
+    --malachite-600: #19a712;
+    --malachite-700: #178312;
+    --malachite-800: #176714;
+    --malachite-900: #135512;
+
+    --sidebar-width: 240px;
+    --sidebar-collapsed-width: 72px;
+    --header-height: 64px;
+
+    --font-base: 'Open Sans', sans-serif;
+}
+
+/* =========================
+   RESET
+========================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-base);
+    background-color: var(--malachite-100);
+    height: 100vh;
+    color: var(--malachite-900);
+    overflow: hidden;
+}
+
+/* =========================
+   LAYOUT SYSTEM
+========================= */
+.app-layout {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) 1fr;
+    grid-template-rows: var(--header-height) 1fr;
+    grid-template-areas:
+        "sidebar header"
+        "sidebar content";
+    height: 100vh;
+    transition: grid-template-columns 0.25s ease;
+}
+
+.app-layout.sidebar-collapsed {
+    grid-template-columns: var(--sidebar-collapsed-width) 1fr;
+}
+
+/* =========================
+   SIDEBAR COMPONENT
+========================= */
+.sidebar {
+    grid-area: sidebar;
+    background-color: var(--malachite-700);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: var(--sidebar-width);
+    transition: width 0.25s ease;
+    z-index: 100;
+    overflow-y: auto;
+}
+
+.app-layout.sidebar-collapsed .sidebar {
+    width: var(--sidebar-collapsed-width);
+    padding: 20px 10px;
+}
+
+.sidebar-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.sidebar-link:hover {
+    background-color: var(--malachite-600);
+}
+
+.sidebar-link.active {
+    background-color: var(--malachite-800);
+}
+
+/* =========================
+   COLLAPSED SIDEBAR STATES
+========================= */
+.app-layout.sidebar-collapsed .sidebar-title {
+    justify-content: center;
+}
+
+.app-layout.sidebar-collapsed .sidebar-title span {
+    display: none;
+}
+
+.app-layout.sidebar-collapsed .sidebar-link {
+    justify-content: center;
+}
+
+.app-layout.sidebar-collapsed .sidebar-link span {
+    display: none;
+}
+
+/* =========================
+   HEADER COMPONENT
+========================= */
+.header {
+    grid-area: header;
+    height: var(--header-height);
+    background-color: var(--malachite-200);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--malachite-300);
+    position: fixed;
+    left: var(--sidebar-width);
+    right: 0;
+    top: 0;
+    z-index: 90;
+    transition: left 0.25s ease;
+}
+
+.app-layout.sidebar-collapsed .header {
+    left: var(--sidebar-collapsed-width);
+}
+
+.system-name {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+/* =========================
+   HEADER USER AREA
+========================= */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.user-profile:hover {
+    background-color: var(--malachite-300);
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+.user-name {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.user-role {
+    font-size: 12px;
+    color: var(--malachite-700);
+}
+
+/* =========================
+   LOGOUT BUTTON
+========================= */
+.logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--malachite-600);
+    border: none;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background-color: var(--malachite-700);
+}
+
+/* =========================
+   MAIN CONTENT AREA
+========================= */
+.content {
+    grid-area: content;
+    padding: 28px 32px;
+    background-color: var(--malachite-50);
+    overflow-y: auto;
+    margin-left: 0;
+    margin-top: 0;
+    height: calc(100vh - var(--header-height));
+    transition: margin-left 0.25s ease;
+}
+
+.app-layout.sidebar-collapsed .content {
+    margin-left: 0;
+}
+
+.page-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+/* =========================
+   KPI COMPONENTS
+========================= */
+.dashboard-kpis {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.kpi-card {
+    background-color: #fff;
+    border-radius: 14px;
+    padding: 18px 20px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.kpi-card.alert {
+    border-left: 6px solid #e53935;
+}
+
+.kpi-label {
+    font-size: 12px;
+    color: var(--malachite-700);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.kpi-value {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+/* =========================
+   DASHBOARD GRID SYSTEM
+========================= */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+/* =========================
+   CARD COMPONENTS
+========================= */
+.dashboard-card {
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 20px 22px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+}
+
+.dashboard-card.wide {
+    grid-column: span 2;
+}
+
+/* =========================
+   WEATHER COMPONENT
+========================= */
+.weather-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.weather-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.weather-temp {
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.weather-desc {
+    font-size: 14px;
+    color: var(--malachite-700);
+}
+
+.weather-meta {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    font-size: 13px;
+    color: var(--malachite-800);
+    gap: 8px;
+}
+
+/* =========================
+   LIST COMPONENTS
+========================= */
+.stat-list,
+.status-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.stat-list li,
+.status-list li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.status-list li.warning {
+    color: #d97706;
+    font-weight: 600;
+}
+
+.status-list li.alert {
+    color: #dc2626;
+    font-weight: 700;
+}
+
+.status-list li.ok {
+    color: var(--malachite-700);
+    font-weight: 600;
+}
+
+/* =========================
+   CHART COMPONENTS
+========================= */
+.fake-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    height: 120px;
+}
+
+.fake-chart .bar {
+    flex: 1;
+    background: linear-gradient(
+        to top,
+        var(--malachite-500),
+        var(--malachite-300)
+    );
+    border-radius: 6px 6px 0 0;
+}
+
+/* =========================
+   LINE CHART
+========================= */
+.line-chart {
+    position: relative;
+    height: 140px;
+}
+
+.line-chart svg {
+    width: 100%;
+    height: 100%;
+}
+
+.chart-points {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 6px;
+}
+
+.chart-points span {
+    width: 10px;
+    height: 10px;
+    background-color: var(--malachite-500);
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px rgba(68, 225, 60, 0.15);
+    transform: translateY(12px);
+}
+
+/* =========================
+   FILTER BAR COMPONENT
+========================= */
+.filter-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr) auto;
+    gap: 16px;
+    align-items: end;
+    margin-bottom: 28px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.filter-group label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--malachite-700);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.filter-group select {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--malachite-200);
+    background-color: var(--malachite-50);
+    font-size: 14px;
+    outline: none;
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filter-group select:focus {
+    outline: none;
+    border-color: var(--malachite-400);
+    box-shadow: 0 0 0 3px rgba(68, 225, 60, 0.15);
+}
+
+.filter-group select:hover {
+    border-color: var(--malachite-400);
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(68, 225, 60, 0.12);
+}
+
+
+/* =========================
+   ICON SYSTEM
+========================= */
+.icon {
+    width: 18px;
+    height: 18px;
+}
+
+.icon-header {
+    width: 20px;
+    height: 20px;
+}
+
+.icon-button {
+    width: 16px;
+    height: 16px;
+}
+
+.icon-logo svg{
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+}
+
+/* =========================
+   MENU BUTTON
+========================= */
+.menu-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.menu-icon-wrapper:hover {
+    background-color: var(--malachite-600);
+}
+
+/* =========================
+   SVG ICONS INLINE
+========================= */
+.icon svg {
+    width: 100%;
+    height: 100%;
+    stroke: currentColor;
+    fill: none;
+}
+
+
+/* =========================
+   TOP PERFORMERS BAR CHART
+   NEXT STEPS
+   ========================= */
+
+.bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 12px;
+}
+
+.bar-group {
+    display: grid;
+    grid-template-columns: 80px 1fr 60px;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.bar-label {
+    font-weight: 600;
+    color: var(--malachite-800);
+}
+
+.bar-value {
+    text-align: right;
+    font-weight: 600;
+    color: var(--malachite-700);
+}
+
+.bar-track {
+    background-color: var(--malachite-100);
+    border-radius: 999px;
+    height: 12px;
+    overflow: hidden;
+    position: relative;
+}
+
+.bar-fill {
+    height: 100%;
+    width: var(--value);
+    background: linear-gradient(
+        90deg,
+        var(--malachite-500),
+        var(--malachite-300)
+    );
+    border-radius: 999px;
+    transition: width 0.6s ease;
+}
+/* =========================
+   BONUS CHART FOOTNOTE
+   ========================= */
+
+.chart-footnote {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--malachite-700);
+    text-align: right;
+}

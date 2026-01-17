@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Granja | Production</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="app-layout" id="appLayout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-title">
+            <div class="menu-icon-wrapper" id="toggleSidebar">
+                <div class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+                        <path d="M3 6h18M3 12h18M3 18h18"/>
+                    </svg>
+                </div>
+            </div>
+            <span>Menu</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="sidebar-link">
+                <div class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 8v4l3 3"/>
+                    </svg>
+                </div>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="consolidation.html" class="sidebar-link">
+                <div class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <span>Consolidated</span>
+            </a>
+
+            <a href="production.html" class="sidebar-link active">
+                <div class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+                        <rect x="3" y="3" width="7" height="7"/>
+                        <rect x="14" y="3" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/>
+                    </svg>
+                </div>
+                <span>Production</span>
+            </a>
+
+            <a href="reports.html" class="sidebar-link">
+                <div class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10 9 9 9 8 9"/>
+                    </svg>
+                </div>
+                <span>Reports</span>
+            </a>
+
+            <a href="configuration.html" class="sidebar-link">
+                <div class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 1v6m0 6v6m5.196-14.196l-4.242 4.242m0 6.364l-4.242 4.242M23 12h-6m-6 0H1m20.196-5.196l-4.242 4.242m0 6.364l-4.242 4.242"/>
+                    </svg>
+                </div>
+                <span>Configuration</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="icon icon-logo">
+            <img src="icons/logo.svg" alt="Farm Icon" style="width:24px; height:24px;">
+                </div>
+        <span class="system-name">Granja</span>
+        
+        <div class="header-right">
+            <div class="user-profile">
+                <div class="user-info">
+                    <span class="user-name">John Doe</span>
+                    <span class="user-role">Administrator</span>
+                </div>
+                <div class="icon icon-header">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </div>
+            </div>
+
+            <button class="logout-btn">
+                <div class="icon icon-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                </div>
+                Logout
+            </button>
+        </div>
+    </header>
+
+    <!-- CONTENT -->
+    <main class="content">
+    <h1 class="page-title">Production</h1>
+
+    <!-- CONTEXT KPIs -->
+    <section class="dashboard-kpis">
+        <div class="kpi-card">
+            <span class="kpi-label">Date</span>
+            <span class="kpi-value">2026 · Week 03</span>
+        </div>
+
+        <div class="kpi-card">
+            <span class="kpi-label">Company</span>
+            <span class="kpi-value">Rancho Norte</span>
+        </div>
+
+        <div class="kpi-card">
+            <span class="kpi-label">Cd</span>
+            <span class="kpi-value">Sugar Cane</span>
+        </div>
+
+        <div class="kpi-card">
+            <span class="kpi-label">Workers</span>
+            <span class="kpi-value">14</span>
+        </div>
+    </section>
+
+
+    <!-- PRODUCTION MATRIX -->
+    <section class="dashboard-card wide" style="margin-top: 24px;">
+        <h3>📋 Production Matrix</h3>
+
+        <div class="dashboard-card" style="padding: 0; box-shadow: none; background: transparent;">
+
+            <table style="width:100%; border-collapse: collapse; font-size: 14px;">
+                <thead>
+                    <tr style="text-align:left; color: var(--malachite-700); font-weight:600;">
+                        <th style="padding: 10px 12px;">Worker</th>
+                        <th style="padding: 10px 12px;">Beds</th>
+                        <th style="padding: 10px 12px;">Bonus Beds</th>
+                        <th style="padding: 10px 12px;">Pull</th>
+                        <th style="padding: 10px 12px;">Hours</th>
+                        <th style="padding: 10px 12px;">Acres</th>
+                        <th style="padding: 10px 12px;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 10px 12px;">Juan Perez</td>
+                        <td style="padding: 10px 12px;">9</td>
+                        <td style="padding: 10px 12px;">1</td>
+                        <td style="padding: 10px 12px;">1st</td>
+                        <td style="padding: 10px 12px;">7.5</td>
+                        <td style="padding: 10px 12px;">2.3</td>
+                        <td style="padding: 10px 12px; color: var(--malachite-700); font-weight:600;">OK</td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding: 10px 12px;">Miguel Torres</td>
+                        <td style="padding: 10px 12px;">8</td>
+                        <td style="padding: 10px 12px;">0</td>
+                        <td style="padding: 10px 12px;">2nd</td>
+                        <td style="padding: 10px 12px;">8.1</td>
+                        <td style="padding: 10px 12px;">2.7</td>
+                        <td style="padding: 10px 12px; color:#d97706; font-weight:600;">Review</td>
+                    </tr>
+
+                    <tr>
+                        <td style="padding: 10px 12px;">Carlos Medina</td>
+                        <td style="padding: 10px 12px;">10</td>
+                        <td style="padding: 10px 12px;">2</td>
+                        <td style="padding: 10px 12px;">1st</td>
+                        <td style="padding: 10px 12px;">8.3</td>
+                        <td style="padding: 10px 12px;">3.1</td>
+                        <td style="padding: 10px 12px; color:#dc2626; font-weight:700;">Flag</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </section>
+
+    <!-- PULL REVIEW -->
+    <section class="dashboard-grid" style="margin-top: 24px;">
+
+        <div class="dashboard-card">
+            <h3>🔍 1st Pull Review</h3>
+            <ul class="stat-list">
+                <li><span>Beds Worked</span><strong>86</strong></li>
+                <li><span>Beds Pending</span><strong>4</strong></li>
+                <li><span>Status</span><strong>In Progress</strong></li>
+            </ul>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>🔁 2nd Pull Review</h3>
+            <ul class="stat-list">
+                <li><span>Beds Worked</span><strong>38</strong></li>
+                <li><span>Beds Pending</span><strong>0</strong></li>
+                <li><span>Status</span><strong>Completed</strong></li>
+            </ul>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>📝 Production Notes</h3>
+            <ul class="status-list">
+                <li>Rain interrupted work on Wednesday</li>
+                <li>North sector completed early</li>
+                <li>2 beds moved to next week</li>
+            </ul>
+        </div>
+
+    </section>
+
+<!-- PRODUCTION SUMMARY -->
+    <section class="dashboard-grid">
+
+        <div class="dashboard-card">
+            <h3>🌾 Production Overview</h3>
+            <ul class="stat-list">
+                <li><span>Total Beds</span><strong>124</strong></li>
+                <li><span>Total Acres</span><strong>32.5</strong></li>
+                <li><span>Estimated Yield</span><strong>14,230 kg</strong></li>
+                <li><span>Active Pulls</span><strong>1st + 2nd</strong></li>
+            </ul>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>⏱️ Time & Efficiency</h3>
+            <ul class="stat-list">
+                <li><span>Avg Hours / Worker</span><strong>7.8 h</strong></li>
+                <li><span>Max Time Rule</span><strong>8 h</strong></li>
+                <li><span>Overtime Cases</span><strong>2</strong></li>
+                <li><span>Efficiency Rate</span><strong>91%</strong></li>
+            </ul>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>⚠️ Validation Flags</h3>
+            <ul class="status-list">
+                <li class="warning">2 workers exceeded max time</li>
+                <li class="warning">3 beds missing pull info</li>
+                <li class="ok">Acre totals validated</li>
+            </ul>
+        </div>
+
+    </section>
+    <!-- FINAL SUMMARY -->
+    <section class="dashboard-card wide" style="margin-top: 24px;">
+        <h3>✅ Production Status</h3>
+        <ul class="stat-list">
+            <li><span>Total Beds Worked</span><strong>124</strong></li>
+            <li><span>Total Acres</span><strong>32.5</strong></li>
+            <li><span>Estimated Yield</span><strong>14,230 kg</strong></li>
+            <li><span>Status</span><strong style="color: var(--malachite-700);">Ready for Consolidation</strong></li>
+        </ul>
+    </section>
+
+    
+    
+
+</main>
+
+<script src="sidebar.js"></script>
+
+</body>
+</html>
