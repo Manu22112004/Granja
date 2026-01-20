@@ -172,6 +172,12 @@ body {
     gap: 16px;
 }
 
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 6px; /* ajusta si lo quieres aún más pegado */
+}
+
 .user-profile {
     display: flex;
     align-items: center;
@@ -494,9 +500,9 @@ body {
     height: 16px;
 }
 
-.icon-logo svg{
-    width: 200px;
-    height: 200px;
+.icon-logo{
+    width: 50px;
+    height: 50px;
     object-fit: contain;
 }
 
