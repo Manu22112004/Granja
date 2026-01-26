@@ -1,19 +1,21 @@
 package com.example.Farm.dto.request;
 
+import java.math.BigDecimal;
 import java.util.UUID;
-
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
 public class PlannedBedRequest {
 
-    @NotBlank
-    private String bedNumber;
+    @NotNull
+    @Positive
+    private Integer bedNumber;
 
-    @NotBlank
-    private Float area;
+    @NotNull
+    @Positive
+    private BigDecimal area;
 
     @NotNull
     private UUID productionMatrixId;

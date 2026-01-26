@@ -1,7 +1,6 @@
 package com.example.Farm.dto.request;
 
-import java.util.UUID;
-
+import java.math.BigDecimal;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -12,15 +11,12 @@ public class FarmRequest {
     @NotBlank
     private String name;
 
-    @NotBlank
-    private Float totalAcrees;
-
-    @NotBlank
-    private Integer totalBeds;
-
-    @NotBlank
-    private Boolean active;
+    @NotNull
+    private BigDecimal totalAcres;
 
     @NotNull
-    private UUID productionMatrixId;
+    private Integer totalBeds;
+
+    @NotNull
+    private Boolean active;
 }

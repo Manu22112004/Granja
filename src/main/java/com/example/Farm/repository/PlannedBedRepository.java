@@ -7,5 +7,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.UUID;
 
 public interface PlannedBedRepository extends JpaRepository<PlannedBed, UUID> {
+    
     Page<PlannedBed> findAll(Pageable pageable);
 }

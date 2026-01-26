@@ -7,5 +7,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.UUID;
 
 public interface ProductionBonusPolicyRepository extends JpaRepository<ProductionBonusPolicy, UUID> {
+    
     Page<ProductionBonusPolicy> findAll(Pageable pageable);
 }

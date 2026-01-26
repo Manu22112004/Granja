@@ -1,9 +1,7 @@
 package com.example.Farm.model;
 
 import java.util.UUID;
-
 import org.hibernate.annotations.UuidGenerator;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,6 +18,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "production_bonus_policies")
 public class ProductionBonusPolicy {
+
     @Id
     @GeneratedValue
     @UuidGenerator

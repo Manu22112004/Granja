@@ -1,7 +1,6 @@
 package com.example.Farm.dto.response;
 
 import java.util.UUID;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,18 +12,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductionMatrixResponse {
+
+    @JsonProperty("production_matrix_id")
+    private UUID productionMatrixId;
+
+    @JsonProperty("max_time")
+    private Integer maxTime;
+
     @JsonProperty("farm_id")
     private UUID farmId;
-
-    @JsonProperty("name")
-    private String name;
-
-    @JsonProperty("total_acres")
-    private Float totalAcres;
-
-    @JsonProperty("total_beds")
-    private Integer totalBeds;
-
-    @JsonProperty("active")
-    private Boolean active;
 }

@@ -1,7 +1,7 @@
 package com.example.Farm.dto.response;
 
+import java.math.BigDecimal;
 import java.util.UUID;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FarmResponse {
+    
     @JsonProperty("farm_id")
     private UUID farmId;
 
@@ -20,7 +21,7 @@ public class FarmResponse {
     private String name;
 
     @JsonProperty("total_acres")
-    private Float totalAcres;
+    private BigDecimal totalAcres;
 
     @JsonProperty("total_beds")
     private Integer totalBeds;
@@ -29,5 +30,5 @@ public class FarmResponse {
     private Boolean active;
 
     @JsonProperty("production_matrix_id")
-    private ProductionMatrixResponse productionMatrix;
+    private UUID productionMatrix;
 }

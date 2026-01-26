@@ -2,12 +2,11 @@ package com.example.Farm.model;
 
 import java.math.BigDecimal;
 import java.util.UUID;
-
 import org.hibernate.annotations.UuidGenerator;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
@@ -17,10 +16,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-
 @Entity
 @Table(name = "farms")
 public class Farm {
+
     @Id
     @GeneratedValue
     @UuidGenerator
@@ -39,6 +38,6 @@ public class Farm {
     @Column(name = "active", nullable = false)
     private Boolean active;
 
-    @OneToOne(mappedBy = "farm", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "farm", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private ProductionMatrix productionMatrix;
 }

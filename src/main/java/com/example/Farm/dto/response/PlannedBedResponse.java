@@ -1,7 +1,7 @@
 package com.example.Farm.dto.response;
 
+import java.math.BigDecimal;
 import java.util.UUID;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlannedBedResponse {
+    
     @JsonProperty("planned_bed_id")
     private UUID plannedBedId;
 
@@ -20,9 +21,9 @@ public class PlannedBedResponse {
     private Integer bedNumber;
 
     @JsonProperty("area")
-    private Float area;
+    private BigDecimal area;
 
     @JsonProperty("production_matrix_id")
-    private ProductionMatrixResponse productionMatrix;
+    private UUID productionMatrixId;
 }
 

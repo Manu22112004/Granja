@@ -19,6 +19,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "planned_beds")
 public class PlannedBed {
+    
     @Id
     @GeneratedValue
     @UuidGenerator
@@ -32,6 +33,6 @@ public class PlannedBed {
     private BigDecimal area;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "production_matrix_id")
+    @JoinColumn(name = "production_matrix_id", nullable = false)
     private ProductionMatrix productionMatrix;
 }

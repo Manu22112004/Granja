@@ -11,10 +11,8 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.List;
 import java.util.UUID;
-
 import org.hibernate.annotations.UuidGenerator;
 
 @Getter
@@ -22,6 +20,7 @@ import org.hibernate.annotations.UuidGenerator;
 @Entity
 @Table(name = "production_matrices")
 public class ProductionMatrix {
+
     @Id
     @GeneratedValue
     @UuidGenerator
