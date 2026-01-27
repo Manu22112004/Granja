@@ -37,19 +37,37 @@ public class ProductionBonusPolicyService {
     public ProductionBonusPolicyResponse create(ProductionBonusPolicyRequest req) {
         ProductionBonusPolicy policy = ProductionBonusPolicyMapper.toEntity(req);
         ProductionMatrix matrix = findMatrixOrThrow(req.getProductionMatrixId());
+
+        if (matrix.getBonusPolicy() != null) {
+            throw new IllegalStateException("ProductionMatrix already has a bonus policy");
+        }
+
         policy.setProductionMatrix(matrix);
-        return ProductionBonusPolicyMapper.toResponse(bonusPolicyRepository.save(policy));
+        matrix.setBonusPolicy(policy);
+
+        return ProductionBonusPolicyMapper.toResponse(policy);
     }
 
     public ProductionBonusPolicyResponse update(UUID id, ProductionBonusPolicyRequest req) {
         ProductionBonusPolicy policy = findPolicyOrThrow(id);
         ProductionBonusPolicyMapper.copyToEntity(req, policy);
-        ProductionMatrix matrix = findMatrixOrThrow(req.getProductionMatrixId());
-        policy.setProductionMatrix(matrix);
+
+        if (req.getProductionMatrixId() != null &&
+            !policy.getProductionMatrix().getProductionMatrixId().equals(req.getProductionMatrixId())) {
+
+            ProductionMatrix matrix = findMatrixOrThrow(req.getProductionMatrixId());
+
+            if (matrix.getBonusPolicy() != null) {
+                throw new IllegalStateException("ProductionMatrix already has a bonus policy");
+            }
+
+            policy.getProductionMatrix().setBonusPolicy(null);
+            policy.setProductionMatrix(matrix);
+            matrix.setBonusPolicy(policy);
+        }
+
         return ProductionBonusPolicyMapper.toResponse(policy);
     }
-
-    // ---------- Helpers ----------
 
     private ProductionBonusPolicy findPolicyOrThrow(UUID id) {
         return bonusPolicyRepository.findById(id)

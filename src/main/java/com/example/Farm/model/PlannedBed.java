@@ -19,11 +19,11 @@ import lombok.Setter;
 @Entity
 @Table(name = "planned_beds")
 public class PlannedBed {
-    
+
     @Id
     @GeneratedValue
     @UuidGenerator
-    @Column(name = "planned_bed_id", nullable = false,updatable = false)
+    @Column(name = "planned_bed_id", nullable = false, updatable = false)
     private UUID plannedBedId;
 
     @Column(name = "bed_number", nullable = false)
@@ -32,7 +32,7 @@ public class PlannedBed {
     @Column(name = "area", precision = 10, scale = 2, nullable = false)
     private BigDecimal area;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "production_matrix_id", nullable = false)
     private ProductionMatrix productionMatrix;
 }

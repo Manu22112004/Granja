@@ -32,3 +32,4 @@ public class ProductionBonusPolicy {
     @JoinColumn(name = "production_matrix_id", nullable = false, unique = true)
     private ProductionMatrix productionMatrix;
 }
+

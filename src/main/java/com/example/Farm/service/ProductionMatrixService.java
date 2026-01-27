@@ -2,7 +2,10 @@ package com.example.Farm.service;
 
 import java.util.List;
 import java.util.UUID;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.Farm.dto.request.ProductionMatrixRequest;
 import com.example.Farm.dto.response.ProductionMatrixResponse;
 import com.example.Farm.exception.ResourceNotFoundException;
@@ -11,9 +14,9 @@ import com.example.Farm.model.Farm;
 import com.example.Farm.model.ProductionMatrix;
 import com.example.Farm.repository.FarmRepository;
 import com.example.Farm.repository.ProductionMatrixRepository;
-import jakarta.transaction.Transactional;
 
 @Service
+@Transactional
 public class ProductionMatrixService {
 
     private final ProductionMatrixRepository productionMatrixRepository;
@@ -33,25 +36,37 @@ public class ProductionMatrixService {
         return ProductionMatrixMapper.toResponse(findMatrixOrThrow(id));
     }
 
-    @Transactional
     public ProductionMatrixResponse create(ProductionMatrixRequest req) {
         ProductionMatrix matrix = ProductionMatrixMapper.toEntity(req);
         Farm farm = findFarmOrThrow(req.getFarmId());
 
-        matrix.setFarm(farm);
-        farm.setProductionMatrix(matrix);
+        if (farm.getProductionMatrix() != null) {
+            throw new IllegalStateException("Farm already has a ProductionMatrix");
+        }
 
-        return ProductionMatrixMapper.toResponse(productionMatrixRepository.save(matrix));
-    }
-
-    @Transactional
-    public ProductionMatrixResponse update(UUID id, ProductionMatrixRequest req) {
-        ProductionMatrix matrix = findMatrixOrThrow(id);
-        ProductionMatrixMapper.copyToEntity(req, matrix);
+        matrix.setFarm(farm); // sincroniza ambos lados
         return ProductionMatrixMapper.toResponse(matrix);
     }
 
-    // ---------- Helpers ----------
+    public ProductionMatrixResponse update(UUID id, ProductionMatrixRequest req) {
+        ProductionMatrix matrix = findMatrixOrThrow(id);
+        ProductionMatrixMapper.copyToEntity(req, matrix);
+
+        if (req.getFarmId() != null &&
+            !matrix.getFarm().getFarmId().equals(req.getFarmId())) {
+
+            Farm newFarm = findFarmOrThrow(req.getFarmId());
+
+            if (newFarm.getProductionMatrix() != null) {
+                throw new IllegalStateException("Farm already has a ProductionMatrix");
+            }
+
+            matrix.getFarm().setProductionMatrix(null);
+            matrix.setFarm(newFarm);
+        }
+
+        return ProductionMatrixMapper.toResponse(matrix);
+    }
 
     private ProductionMatrix findMatrixOrThrow(UUID id) {
         return productionMatrixRepository.findById(id)

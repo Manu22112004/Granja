@@ -15,6 +15,11 @@ public final class ProductionBonusPolicyMapper {
         return ProductionBonusPolicyResponse.builder()
                 .productionBonusPolicyId(policy.getProductionBonusPolicyId())
                 .workersPerBed(policy.getWorkersPerBed())
+                .productionMatrixId(
+                        policy.getProductionMatrix() != null
+                                ? policy.getProductionMatrix().getProductionMatrixId()
+                                : null
+                )
                 .build();
     }
 
@@ -36,6 +41,8 @@ public final class ProductionBonusPolicyMapper {
     }
 
     private static void apply(ProductionBonusPolicyRequest request, ProductionBonusPolicy policy) {
-        policy.setWorkersPerBed(request.getWorkersPerBed());
+        if (request.getWorkersPerBed() != null) {
+            policy.setWorkersPerBed(request.getWorkersPerBed());
+        }
     }
 }

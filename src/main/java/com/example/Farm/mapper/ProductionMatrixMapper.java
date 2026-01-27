@@ -15,6 +15,7 @@ public final class ProductionMatrixMapper {
         return ProductionMatrixResponse.builder()
                 .productionMatrixId(matrix.getProductionMatrixId())
                 .maxTime(matrix.getMaxTime())
+                .farmId(matrix.getFarm() != null ? matrix.getFarm().getFarmId() : null)
                 .build();
     }
 
@@ -36,6 +37,8 @@ public final class ProductionMatrixMapper {
     }
 
     private static void apply(ProductionMatrixRequest request, ProductionMatrix matrix) {
-        matrix.setMaxTime(request.getMaxTime());
+        if (request.getMaxTime() != null) {
+            matrix.setMaxTime(request.getMaxTime());
+        }
     }
 }

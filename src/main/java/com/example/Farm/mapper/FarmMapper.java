@@ -18,6 +18,11 @@ public final class FarmMapper {
                 .totalAcres(farm.getTotalAcres())
                 .totalBeds(farm.getTotalBeds())
                 .active(farm.getActive())
+                .productionMatrix(
+                        farm.getProductionMatrix() != null
+                                ? farm.getProductionMatrix().getProductionMatrixId()
+                                : null
+                )
                 .build();
     }
 
@@ -39,9 +44,9 @@ public final class FarmMapper {
     }
 
     private static void apply(FarmRequest request, Farm farm) {
-        farm.setName(request.getName());
-        farm.setTotalAcres(request.getTotalAcres());
-        farm.setTotalBeds(request.getTotalBeds());
-        farm.setActive(request.getActive());
+        if (request.getName() != null) farm.setName(request.getName());
+        if (request.getTotalAcres() != null) farm.setTotalAcres(request.getTotalAcres());
+        if (request.getTotalBeds() != null) farm.setTotalBeds(request.getTotalBeds());
+        if (request.getActive() != null) farm.setActive(request.getActive());
     }
 }

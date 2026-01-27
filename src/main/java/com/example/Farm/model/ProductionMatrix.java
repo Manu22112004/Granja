@@ -39,4 +39,12 @@ public class ProductionMatrix {
     @OneToOne
     @JoinColumn(name = "farm_id", nullable = false, unique = true)
     private Farm farm;
+
+    public void setFarm(Farm farm) {
+        this.farm = farm;
+        if (farm != null && farm.getProductionMatrix() != this) {
+            farm.setProductionMatrix(this);
+        }
+    }
 }
+

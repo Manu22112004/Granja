@@ -40,4 +40,11 @@ public class Farm {
 
     @OneToOne(mappedBy = "farm", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private ProductionMatrix productionMatrix;
+
+    public void setProductionMatrix(ProductionMatrix matrix) {
+        this.productionMatrix = matrix;
+        if (matrix != null && matrix.getFarm() != this) {
+            matrix.setFarm(this);
+        }
+    }
 }

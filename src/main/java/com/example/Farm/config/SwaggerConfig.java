@@ -16,8 +16,8 @@ public class SwaggerConfig {
     public OpenAPI apiInfo() {
         return new OpenAPI()
             .info(new Info()
-                .title("ScoreSense API")
-                .description("Documentation for ScoreSense Project")
+                .title("Farm API")
+                .description("Documentation for Farm Project")
                 .version("1.0"))
             .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
             .components(new Components()

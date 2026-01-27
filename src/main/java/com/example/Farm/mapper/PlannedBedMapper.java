@@ -16,6 +16,11 @@ public final class PlannedBedMapper {
                 .plannedBedId(bed.getPlannedBedId())
                 .bedNumber(bed.getBedNumber())
                 .area(bed.getArea())
+                .productionMatrixId(
+                        bed.getProductionMatrix() != null
+                                ? bed.getProductionMatrix().getProductionMatrixId()
+                                : null
+                )
                 .build();
     }
 
@@ -37,7 +42,8 @@ public final class PlannedBedMapper {
     }
 
     private static void apply(PlannedBedRequest request, PlannedBed bed) {
-        bed.setBedNumber(request.getBedNumber());
-        bed.setArea(request.getArea());
+        if (request.getBedNumber() != null) bed.setBedNumber(request.getBedNumber());
+        if (request.getArea() != null) bed.setArea(request.getArea());
     }
 }
+

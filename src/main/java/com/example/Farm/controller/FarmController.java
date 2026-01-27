@@ -7,8 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import com.example.Farm.dto.request.FarmRequest;
 import com.example.Farm.dto.response.FarmResponse;
@@ -25,28 +23,20 @@ public class FarmController {
         this.farmService = farmService;
     }
 
-    // ---------- CRUD ----------
-
     @GetMapping
-    @Operation(summary = "Get all farms", description = "Returns a list of all registered farms")
-    @ApiResponse(responseCode = "200", description = "Farms retrieved successfully")
+    @Operation(summary = "Get all farms")
     public List<FarmResponse> getAll() {
         return farmService.getAll();
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get farm by ID")
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Farm found"),
-        @ApiResponse(responseCode = "404", description = "Farm not found")
-    })
     public FarmResponse getById(@PathVariable UUID id) {
         return farmService.getById(id);
     }
 
     @PostMapping
     @Operation(summary = "Create a new farm")
-    @ApiResponse(responseCode = "201", description = "Farm created successfully")
     public ResponseEntity<FarmResponse> create(@Valid @RequestBody FarmRequest request) {
         FarmResponse created = farmService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
@@ -54,12 +44,8 @@ public class FarmController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update an existing farm")
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Farm updated"),
-        @ApiResponse(responseCode = "404", description = "Farm not found")
-    })
-    public FarmResponse update(@PathVariable UUID id,
-                               @Valid @RequestBody FarmRequest request) {
-        return farmService.update(id, request);
+    public ResponseEntity<FarmResponse> update(@PathVariable UUID id,
+                                               @Valid @RequestBody FarmRequest request) {
+        return ResponseEntity.ok(farmService.update(id, request));
     }
 }

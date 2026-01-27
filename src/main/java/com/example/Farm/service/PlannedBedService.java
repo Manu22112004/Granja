@@ -38,18 +38,22 @@ public class PlannedBedService {
         PlannedBed bed = PlannedBedMapper.toEntity(req);
         ProductionMatrix matrix = findMatrixOrThrow(req.getProductionMatrixId());
         bed.setProductionMatrix(matrix);
-        return PlannedBedMapper.toResponse(plannedBedRepository.save(bed));
+        return PlannedBedMapper.toResponse(bed);
     }
 
     public PlannedBedResponse update(UUID id, PlannedBedRequest req) {
         PlannedBed bed = findPlannedBedOrThrow(id);
         PlannedBedMapper.copyToEntity(req, bed);
-        ProductionMatrix matrix = findMatrixOrThrow(req.getProductionMatrixId());
-        bed.setProductionMatrix(matrix);
+
+        if (req.getProductionMatrixId() != null &&
+            !bed.getProductionMatrix().getProductionMatrixId().equals(req.getProductionMatrixId())) {
+
+            ProductionMatrix matrix = findMatrixOrThrow(req.getProductionMatrixId());
+            bed.setProductionMatrix(matrix);
+        }
+
         return PlannedBedMapper.toResponse(bed);
     }
-
-    // ---------- Helpers ----------
 
     private PlannedBed findPlannedBedOrThrow(UUID id) {
         return plannedBedRepository.findById(id)
