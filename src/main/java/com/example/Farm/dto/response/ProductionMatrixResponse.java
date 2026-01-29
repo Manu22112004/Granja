@@ -1,5 +1,6 @@
 package com.example.Farm.dto.response;
 
+import java.util.List;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -21,4 +22,8 @@ public class ProductionMatrixResponse {
 
     @JsonProperty("farm_id")
     private UUID farmId;
+
+    private UUID productionBonusPolicyId;
+    
+    private List<UUID> plannedBedIds;
 }

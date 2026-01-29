@@ -46,5 +46,16 @@ public class ProductionMatrix {
             farm.setProductionMatrix(this);
         }
     }
+
+    public void addPlannedBed(PlannedBed bed) {
+        plannedBeds.add(bed);
+        bed.setProductionMatrix(this);
+    }
+
+    public void removePlannedBed(PlannedBed bed) {
+        plannedBeds.remove(bed);
+        bed.setProductionMatrix(null);
+    }
+
 }
 

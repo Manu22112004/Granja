@@ -34,12 +34,18 @@ public class PlannedBedService {
         return PlannedBedMapper.toResponse(findPlannedBedOrThrow(id));
     }
 
+    @Transactional
     public PlannedBedResponse create(PlannedBedRequest req) {
         PlannedBed bed = PlannedBedMapper.toEntity(req);
         ProductionMatrix matrix = findMatrixOrThrow(req.getProductionMatrixId());
-        bed.setProductionMatrix(matrix);
+
+        matrix.addPlannedBed(bed); 
+
+        plannedBedRepository.save(bed); 
+
         return PlannedBedMapper.toResponse(bed);
     }
+
 
     public PlannedBedResponse update(UUID id, PlannedBedRequest req) {
         PlannedBed bed = findPlannedBedOrThrow(id);

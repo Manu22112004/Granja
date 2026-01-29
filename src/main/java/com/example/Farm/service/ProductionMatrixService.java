@@ -28,10 +28,15 @@ public class ProductionMatrixService {
         this.farmRepository = farmRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<ProductionMatrixResponse> getAll() {
-        return ProductionMatrixMapper.toResponseList(productionMatrixRepository.findAll());
+        return productionMatrixRepository.findAll()
+                .stream()
+                .map(ProductionMatrixMapper::toResponse)
+                .toList();
     }
 
+    @Transactional(readOnly = true)
     public ProductionMatrixResponse getById(UUID id) {
         return ProductionMatrixMapper.toResponse(findMatrixOrThrow(id));
     }
@@ -44,7 +49,8 @@ public class ProductionMatrixService {
             throw new IllegalStateException("Farm already has a ProductionMatrix");
         }
 
-        matrix.setFarm(farm); // sincroniza ambos lados
+        matrix.setFarm(farm);
+        productionMatrixRepository.save(matrix);
         return ProductionMatrixMapper.toResponse(matrix);
     }
 

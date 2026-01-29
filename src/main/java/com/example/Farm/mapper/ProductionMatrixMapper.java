@@ -3,6 +3,7 @@ package com.example.Farm.mapper;
 import java.util.List;
 import com.example.Farm.dto.request.ProductionMatrixRequest;
 import com.example.Farm.dto.response.ProductionMatrixResponse;
+import com.example.Farm.model.PlannedBed;
 import com.example.Farm.model.ProductionMatrix;
 
 public final class ProductionMatrixMapper {
@@ -16,6 +17,18 @@ public final class ProductionMatrixMapper {
                 .productionMatrixId(matrix.getProductionMatrixId())
                 .maxTime(matrix.getMaxTime())
                 .farmId(matrix.getFarm() != null ? matrix.getFarm().getFarmId() : null)
+                .productionBonusPolicyId(
+                    matrix.getBonusPolicy() != null
+                        ? matrix.getBonusPolicy().getProductionBonusPolicyId()
+                        : null
+                )
+                .plannedBedIds(
+                    matrix.getPlannedBeds() != null
+                        ? matrix.getPlannedBeds().stream()
+                            .map(PlannedBed::getPlannedBedId)
+                            .toList()
+                        : List.of()
+                )
                 .build();
     }
 
