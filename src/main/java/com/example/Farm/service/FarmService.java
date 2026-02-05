@@ -41,7 +41,7 @@ public class FarmService {
         FarmMapper.copyToEntity(req, farm);
         return FarmMapper.toResponse(farm); // dirty checking
     }
-
+    
     private Farm findFarmOrThrow(UUID id) {
         return farmRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", id));

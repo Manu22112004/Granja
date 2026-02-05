@@ -1,0 +1,77 @@
+package com.example.Farm.model;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.UUID;
+import org.hibernate.annotations.UuidGenerator;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "work_consolidations")
+public class WorkConsolidation {
+
+    @Id
+    @GeneratedValue
+    @UuidGenerator
+    @Column(name = "work_consolidation_id", nullable = false, updatable = false)
+    private UUID workConsolidationId;
+
+    @Column(name = "work_date", nullable = false)
+    private LocalDate workDate;
+
+    @Column(name = "pull_type", nullable = false, length = 20)
+    private String pullType;
+
+    @Column(name = "max_time", nullable = false)
+    private BigDecimal maxTime;
+
+    @Column(name = "total_hours", precision = 10, scale = 2, nullable = false)
+    private BigDecimal totalHours;
+
+    @Column(name = "total_beds_planned", nullable = false)
+    private Integer totalBedsPlanned;
+
+    @Column(name = "total_beds_produced", precision = 10, scale = 2, nullable = false)
+    private BigDecimal totalBedsProduced;
+
+    @Column(name = "total_cost", precision = 12, scale = 2, nullable = false)
+    private BigDecimal totalCost;
+
+    @Column(name = "closed", nullable = false)
+    private Boolean closed = false;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "company_id", nullable = false)
+    private Company company;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
+
+    @OneToOne
+    @JoinColumn(name = "production_report_id", nullable = false, unique = true)
+    private ProductionReport productionReport;
+
+    @OneToOne
+    @JoinColumn(name = "production_id", nullable = false, unique = true)
+    private Production production;
+
+    @OneToOne
+    @JoinColumn(name = "production_matrix_id", nullable = false, unique = true)
+    private ProductionMatrix productionMatrix;
+
+    @OneToOne
+    @JoinColumn(name = "pricing_policy_id", nullable = false, unique = true)
+    private PricingPolicy pricingPolicy;
+}
