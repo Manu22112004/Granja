@@ -25,7 +25,7 @@ public class WorkerProduction {
     @Column(name = "worker_production_id", nullable = false, updatable = false)
     private UUID workerProductionId;
 
-    @Column(name = "beds_assigned", precision = 10, scale = 2, nullable = false)
+    @Column(name = "beds_assigned", nullable = false)
     private Double bedsAssigned;
 
     @Column(name = "bonus_applied", nullable = false)

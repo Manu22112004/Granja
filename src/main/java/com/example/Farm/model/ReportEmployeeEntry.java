@@ -34,7 +34,7 @@ public class ReportEmployeeEntry {
     @Column(name = "employee_initials", nullable = false, length = 10)
     private String employeeInitials;
 
-    @Column(name = "beds_completed", precision = 10, scale = 2, nullable = false)
+    @Column(name = "beds_completed", nullable = false)
     private Double bedsCompleted;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

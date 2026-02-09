@@ -26,7 +26,7 @@ public class Production {
     @Column(name = "production_id", nullable = false, updatable = false)
     private UUID productionId;
 
-    @Column(name = "total_beds_produced", precision = 10, scale = 2, nullable = false)
+    @Column(name = "total_beds_produced", nullable = false)
     private Double totalBedsProduced;
 
     @Column(name = "closed", nullable = false)

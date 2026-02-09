@@ -36,7 +36,7 @@ public class ProductionReport {
     @Column(name = "number_of_farms", nullable = false)
     private Integer numberOfFarms;
 
-    @Column(name = "total_beds", precision = 10, scale = 2, nullable = false)
+    @Column(name = "total_beds", nullable = false)
     private Double totalBeds;
 
     @OneToMany(mappedBy = "productionReport", cascade = CascadeType.ALL, orphanRemoval = true)
