@@ -51,6 +51,10 @@ public class WorkConsolidation {
     @Column(name = "closed", nullable = false)
     private Boolean closed = false;
 
+    /*-------------------
+        RELATIONSHIPS
+    -------------------*/
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
@@ -59,19 +63,19 @@ public class WorkConsolidation {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    @OneToOne
-    @JoinColumn(name = "production_report_id", nullable = false, unique = true)
+    @OneToOne(optional = true)
+    @JoinColumn(name = "production_report_id", nullable = true, unique = true)
     private ProductionReport productionReport;
 
-    @OneToOne
-    @JoinColumn(name = "production_id", nullable = false, unique = true)
+    @OneToOne(optional = true)
+    @JoinColumn(name = "production_id", nullable = true, unique = true)
     private Production production;
 
-    @OneToOne
-    @JoinColumn(name = "production_matrix_id", nullable = false, unique = true)
+    @OneToOne(optional = true)
+    @JoinColumn(name = "production_matrix_id", nullable = true, unique = true)
     private ProductionMatrix productionMatrix;
 
-    @OneToOne
-    @JoinColumn(name = "pricing_policy_id", nullable = false, unique = true)
+    @OneToOne(optional = true)
+    @JoinColumn(name = "pricing_policy_id", nullable = true, unique = true)
     private PricingPolicy pricingPolicy;
 }

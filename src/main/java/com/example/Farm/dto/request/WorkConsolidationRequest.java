@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
@@ -40,4 +41,16 @@ public class WorkConsolidationRequest {
 
     @NotNull
     private UUID customerId;
+
+    @Null
+    private UUID productionId;
+
+    @Null
+    private UUID productionMatrixId;
+
+    @Null
+    private UUID pricingPolicyId;
+
+    @Null
+    private UUID productionReportId;
 }
