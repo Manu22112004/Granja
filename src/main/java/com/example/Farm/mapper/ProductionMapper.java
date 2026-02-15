@@ -15,11 +15,6 @@ public final class ProductionMapper {
         return ProductionResponse.builder()
                 .productionId(production.getProductionId())
                 .totalBedsProduced(production.getTotalBedsProduced())
-                .workConsolidationId(
-                        production.getWorkConsolidation() != null
-                                ? production.getWorkConsolidation().getWorkConsolidationId()
-                                : null
-                )
                 .build();
 
     }

@@ -2,8 +2,6 @@ package com.example.Farm.service;
 
 import java.util.List;
 import java.util.UUID;
-
-import org.hibernate.boot.registry.classloading.spi.ClassLoaderService.Work;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.Farm.dto.request.WorkConsolidationRequest;
@@ -11,18 +9,22 @@ import com.example.Farm.dto.response.WorkConsolidationResponse;
 import com.example.Farm.exception.ResourceNotFoundException;
 import com.example.Farm.mapper.WorkConsolidationMapper;
 import com.example.Farm.model.Company;
+import com.example.Farm.model.CrewLeader;
 import com.example.Farm.model.Customer;
 import com.example.Farm.model.PricingPolicy;
 import com.example.Farm.model.Production;
 import com.example.Farm.model.ProductionMatrix;
 import com.example.Farm.model.ProductionReport;
+import com.example.Farm.model.QualityChecker;
 import com.example.Farm.model.WorkConsolidation;
 import com.example.Farm.repository.CompanyRepository;
+import com.example.Farm.repository.CrewLeaderRepository;
 import com.example.Farm.repository.CustomerRepository;
 import com.example.Farm.repository.PricingPolicyRepository;
 import com.example.Farm.repository.ProductionMatrixRepository;
 import com.example.Farm.repository.ProductionReportRepository;
 import com.example.Farm.repository.ProductionRepository;
+import com.example.Farm.repository.QualityCheckerRepository;
 import com.example.Farm.repository.WorkConsolidationRepository;
 
 @Service
@@ -36,6 +38,8 @@ public class WorkConsolidationService {
     private final ProductionMatrixRepository productionMatrixRepository;
     private final PricingPolicyRepository pricingPolicyRepository;
     private final ProductionReportRepository productionReportRepository;
+    private final CrewLeaderRepository crewLeaderRepository;
+    private final QualityCheckerRepository qualityCheckerRepository;
 
     public WorkConsolidationService(WorkConsolidationRepository workConsolidationRepository,
                                     CompanyRepository companyRepository,
@@ -43,7 +47,9 @@ public class WorkConsolidationService {
                                     ProductionRepository productionRepository,
                                     ProductionMatrixRepository productionMatrixRepository,
                                     PricingPolicyRepository pricingPolicyRepository,
-                                    ProductionReportRepository productionReportRepository) {
+                                    ProductionReportRepository productionReportRepository,
+                                    CrewLeaderRepository crewLeaderRepository,
+                                    QualityCheckerRepository qualityCheckerRepository) {
         this.workConsolidationRepository = workConsolidationRepository;
         this.companyRepository = companyRepository;
         this.customerRepository = customerRepository;
@@ -51,6 +57,8 @@ public class WorkConsolidationService {
         this.productionMatrixRepository = productionMatrixRepository;
         this.pricingPolicyRepository = pricingPolicyRepository;
         this.productionReportRepository = productionReportRepository;
+        this.crewLeaderRepository = crewLeaderRepository;
+        this.qualityCheckerRepository = qualityCheckerRepository;
     }
 
     public List<WorkConsolidationResponse> getAll() {
@@ -95,6 +103,19 @@ public class WorkConsolidationService {
             );
         }
 
+        if (req.getCrewLeaderId() != null) {
+            consolidation.setCrewLeader(
+                findCrewLeaderOrThrow(req.getCrewLeaderId())
+            );
+        }
+
+        if (req.getQualityCheckerId() != null) {
+            consolidation.setQualityChecker(
+                findQualityCheckerOrThrow(req.getQualityCheckerId())
+            );
+        }
+
+
         return WorkConsolidationMapper.toResponse(
                 workConsolidationRepository.save(consolidation)
         );
@@ -105,7 +126,6 @@ public class WorkConsolidationService {
     public WorkConsolidationResponse update(UUID id, WorkConsolidationRequest req) {
 
         WorkConsolidation consolidation = findConsolidationOrThrow(id);
-
         WorkConsolidationMapper.copyToEntity(req, consolidation);
 
         if (req.getProductionMatrixId() != null) {
@@ -118,9 +138,27 @@ public class WorkConsolidationService {
             consolidation.setProductionMatrix(null);
         }
 
+        if (req.getCrewLeaderId() != null) {
+            CrewLeader crewLeader = crewLeaderRepository
+                .findById(req.getCrewLeaderId())
+                .orElseThrow(() -> new RuntimeException("CrewLeader not found"));
+
+            consolidation.setCrewLeader(crewLeader);
+        } else {
+            consolidation.setCrewLeader(null);
+        }
+
+        if (req.getQualityCheckerId() != null) {
+            QualityChecker qualityChecker = qualityCheckerRepository
+                .findById(req.getQualityCheckerId())
+                .orElseThrow(() -> new RuntimeException("QualityChecker not found"));
+
+            consolidation.setQualityChecker(qualityChecker);
+        } else {
+            consolidation.setQualityChecker(null);
+        }
         return WorkConsolidationMapper.toResponse(consolidation);
     }
-
 
     public WorkConsolidationResponse close(UUID id) {
         WorkConsolidation consolidation = findConsolidationOrThrow(id);
@@ -128,6 +166,9 @@ public class WorkConsolidationService {
         return WorkConsolidationMapper.toResponse(consolidation);
     }
 
+    /*-------------------
+           HELPERS
+    -------------------*/
     private WorkConsolidation findConsolidationOrThrow(UUID id) {
         return workConsolidationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("WorkConsolidation", "id", id));
@@ -160,5 +201,15 @@ public class WorkConsolidationService {
     private ProductionReport findProductionReportOrThrow(UUID id) {
         return productionReportRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ProductionReport", "id", id));
+    }
+
+    private CrewLeader findCrewLeaderOrThrow(UUID id) {
+        return crewLeaderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("CrewLeader", "id", id));
+    }
+
+    private QualityChecker findQualityCheckerOrThrow(UUID id) {
+        return qualityCheckerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("QualityChecker", "id", id));
     }
 }

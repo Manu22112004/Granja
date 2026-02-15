@@ -2,30 +2,23 @@ package com.example.Farm.service;
 
 import java.util.List;
 import java.util.UUID;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.example.Farm.dto.request.ProductionRequest;
 import com.example.Farm.dto.response.ProductionResponse;
 import com.example.Farm.exception.ResourceNotFoundException;
 import com.example.Farm.mapper.ProductionMapper;
 import com.example.Farm.model.Production;
-import com.example.Farm.model.WorkConsolidation;
 import com.example.Farm.repository.ProductionRepository;
-import com.example.Farm.repository.WorkConsolidationRepository;
 
 @Service
 @Transactional
 public class ProductionService {
 
     private final ProductionRepository productionRepository;
-    private final WorkConsolidationRepository workConsolidationRepository;
 
-    public ProductionService(ProductionRepository productionRepository,
-                             WorkConsolidationRepository workConsolidationRepository) {
+    public ProductionService(ProductionRepository productionRepository) {
         this.productionRepository = productionRepository;
-        this.workConsolidationRepository = workConsolidationRepository;
     }
 
     public List<ProductionResponse> getAll() {
@@ -47,13 +40,6 @@ public class ProductionService {
         return ProductionMapper.toResponse(production);
     }
 
-    public ProductionResponse start(ProductionRequest req) {
-        Production production = ProductionMapper.toEntity(req);
-        WorkConsolidation consolidation = findConsolidationOrThrow(req.getWorkConsolidationId());
-        production.setWorkConsolidation(consolidation);
-        return ProductionMapper.toResponse(productionRepository.save(production));
-    }
-
     public ProductionResponse updateTotals(UUID id, Double totalBedsProduced) {
         Production production = findProductionOrThrow(id);
         production.setTotalBedsProduced(totalBedsProduced);
@@ -69,10 +55,5 @@ public class ProductionService {
     private Production findProductionOrThrow(UUID id) {
         return productionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Production", "id", id));
-    }
-
-    private WorkConsolidation findConsolidationOrThrow(UUID id) {
-        return workConsolidationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("WorkConsolidation", "id", id));
     }
 }

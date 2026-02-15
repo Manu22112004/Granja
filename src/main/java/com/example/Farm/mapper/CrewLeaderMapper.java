@@ -13,12 +13,14 @@ public final class CrewLeaderMapper {
         if (leader == null) return null;
 
         return CrewLeaderResponse.builder()
-                .crewLeaderId(leader.getPersonId())
-                .employeeCode(leader.getEmployeeCode())
                 .personId(leader.getPersonId())
+                .firstName(leader.getFirstName())
+                .lastName(leader.getLastName())
+                .active(leader.getActive())
+                .employeeCode(leader.getEmployeeCode())
                 .build();
     }
-
+    
     public static List<CrewLeaderResponse> toResponseList(List<CrewLeader> list) {
         if (list == null || list.isEmpty()) return List.of();
         return list.stream().map(CrewLeaderMapper::toResponse).toList();
@@ -27,6 +29,7 @@ public final class CrewLeaderMapper {
     public static CrewLeader toEntity(CrewLeaderRequest request) {
         if (request == null) return null;
         CrewLeader leader = new CrewLeader();
+        PersonMapper.apply(request, leader);
         apply(request, leader);
         return leader;
     }

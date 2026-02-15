@@ -45,9 +45,21 @@ public class WorkConsolidationResponse {
     @JsonProperty("customer_id")
     private UUID customerId;
 
+    @JsonProperty("production_id")
+    private UUID productionId;
+
     @JsonProperty("production_matrix_id")
     private UUID productionMatrixId;
 
     @JsonProperty("pricing_policy_id")
     private UUID pricingPolicyId;
+
+    @JsonProperty("production_report_id")
+    private UUID productionReportId;
+
+    @JsonProperty("crew_leader_id")
+    private UUID crewLeaderId;
+
+    @JsonProperty("quality_checker_id")
+    private UUID qualityCheckerId;
 }

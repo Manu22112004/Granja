@@ -23,6 +23,11 @@ public final class WorkConsolidationMapper {
                 .totalCost(wc.getTotalCost())
                 .companyId(wc.getCompany() != null ? wc.getCompany().getCompanyId() : null)
                 .customerId(wc.getCustomer() != null ? wc.getCustomer().getCustomerId() : null)
+                .productionId(
+                    wc.getProduction() != null
+                    ? wc.getProduction().getProductionId()
+                    : null
+                )
                 .productionMatrixId(
                         wc.getProductionMatrix() != null
                                 ? wc.getProductionMatrix().getProductionMatrixId()
@@ -31,6 +36,21 @@ public final class WorkConsolidationMapper {
                 .pricingPolicyId(
                         wc.getPricingPolicy() != null
                                 ? wc.getPricingPolicy().getPricingPolicyId()
+                                : null
+                )
+                .productionReportId(
+                        wc.getProductionReport() != null
+                                ? wc.getProductionReport().getProductionReportId()
+                                : null
+                )
+                .crewLeaderId(
+                        wc.getCrewLeader() != null
+                                ? wc.getCrewLeader().getPersonId()
+                                : null
+                )
+                .qualityCheckerId(
+                        wc.getQualityChecker() != null
+                                ? wc.getQualityChecker().getPersonId()
                                 : null
                 )
                 .build();

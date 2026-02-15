@@ -13,7 +13,10 @@ public final class QualityCheckerMapper {
         if (checker == null) return null;
 
         return QualityCheckerResponse.builder()
-                .qualityCheckerId(checker.getPersonId())
+                .personId(checker.getPersonId())
+                .firstName(checker.getFirstName())
+                .lastName(checker.getLastName())
+                .active(checker.getActive())
                 .certificationLevel(checker.getCertificationLevel())
                 .build();
     }
@@ -26,6 +29,7 @@ public final class QualityCheckerMapper {
     public static QualityChecker toEntity(QualityCheckerRequest request) {
         if (request == null) return null;
         QualityChecker checker = new QualityChecker();
+        PersonMapper.apply(request, checker);
         apply(request, checker);
         return checker;
     }

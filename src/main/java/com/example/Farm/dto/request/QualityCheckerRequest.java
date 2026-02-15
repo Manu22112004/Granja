@@ -2,9 +2,11 @@ package com.example.Farm.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class QualityCheckerRequest {
+@EqualsAndHashCode(callSuper = true)
+public class QualityCheckerRequest extends PersonRequest {
 
     @NotBlank
     private String certificationLevel;

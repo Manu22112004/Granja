@@ -8,7 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,6 +34,4 @@ public class Production {
     @OneToMany(mappedBy = "production", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WorkerProduction> workerProductions;
 
-    @OneToOne(mappedBy = "production", cascade = CascadeType.ALL, orphanRemoval = true)
-    private WorkConsolidation workConsolidation;
 }

@@ -36,6 +36,12 @@ public class QualityCheckerService {
 
     public QualityCheckerResponse update(UUID id, QualityCheckerRequest req) {
         QualityChecker checker = findCheckerOrThrow(id);
+
+        // Fields for update a person
+        checker.setFirstName(req.getFirstName());
+        checker.setLastName(req.getLastName());
+        checker.setActive(req.getActive());
+        
         QualityCheckerMapper.copyToEntity(req, checker);
         return QualityCheckerMapper.toResponse(checker);
     }

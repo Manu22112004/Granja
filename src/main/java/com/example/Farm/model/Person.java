@@ -32,5 +32,5 @@ public abstract class Person {
     private String lastName;
 
     @Column(name = "active", nullable = false)
-    private Boolean active;
+    private Boolean active = true;
 }

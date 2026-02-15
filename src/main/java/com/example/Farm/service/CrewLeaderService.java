@@ -36,6 +36,12 @@ public class CrewLeaderService {
 
     public CrewLeaderResponse update(UUID id, CrewLeaderRequest req) {
         CrewLeader leader = findLeaderOrThrow(id);
+
+        // Fields for update a person
+        leader.setFirstName(req.getFirstName());
+        leader.setLastName(req.getLastName());
+        leader.setActive(req.getActive());
+
         CrewLeaderMapper.copyToEntity(req, leader);
         return CrewLeaderMapper.toResponse(leader);
     }
