@@ -40,8 +40,6 @@ public class ProductionMatrix {
     @JoinColumn(name = "farm_id", nullable = false, unique = true)
     private Farm farm;
 
-    @OneToOne(mappedBy = "productionMatrix", cascade = CascadeType.ALL, orphanRemoval = true)
-    private WorkConsolidation workConsolidation;
     
 
     public void setFarm(Farm farm) {

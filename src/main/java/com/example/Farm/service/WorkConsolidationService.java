@@ -2,6 +2,8 @@ package com.example.Farm.service;
 
 import java.util.List;
 import java.util.UUID;
+
+import org.hibernate.boot.registry.classloading.spi.ClassLoaderService.Work;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.Farm.dto.request.WorkConsolidationRequest;
@@ -99,12 +101,26 @@ public class WorkConsolidationService {
     }
 
 
-
+    @Transactional
     public WorkConsolidationResponse update(UUID id, WorkConsolidationRequest req) {
+
         WorkConsolidation consolidation = findConsolidationOrThrow(id);
+
         WorkConsolidationMapper.copyToEntity(req, consolidation);
+
+        if (req.getProductionMatrixId() != null) {
+            ProductionMatrix matrix = productionMatrixRepository
+                .findById(req.getProductionMatrixId())
+                .orElseThrow(() -> new RuntimeException("ProductionMatrix not found"));
+
+            consolidation.setProductionMatrix(matrix);
+        } else {
+            consolidation.setProductionMatrix(null);
+        }
+
         return WorkConsolidationMapper.toResponse(consolidation);
     }
+
 
     public WorkConsolidationResponse close(UUID id) {
         WorkConsolidation consolidation = findConsolidationOrThrow(id);

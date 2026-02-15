@@ -78,4 +78,5 @@ public class WorkConsolidation {
     @OneToOne(optional = true)
     @JoinColumn(name = "pricing_policy_id", nullable = true, unique = true)
     private PricingPolicy pricingPolicy;
+
 }
