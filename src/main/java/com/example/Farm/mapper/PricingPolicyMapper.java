@@ -18,6 +18,9 @@ public final class PricingPolicyMapper {
                 .pricePerBed(policy.getPricePerBed())
                 .effectiveFrom(policy.getEffectiveFrom())
                 .active(policy.getActive())
+                .workConsolidationId(policy.getWorkConsolidation() != null 
+                    ? policy.getWorkConsolidation().getWorkConsolidationId() 
+                    : null)
                 .build();
     }
 

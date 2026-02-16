@@ -29,4 +29,7 @@ public class PricingPolicyResponse {
 
     @JsonProperty("active")
     private Boolean active;
+
+    @JsonProperty("work_consolidation_id")
+    private UUID workConsolidationId;
 }
