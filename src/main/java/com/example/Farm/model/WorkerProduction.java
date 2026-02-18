@@ -36,6 +36,5 @@ public class WorkerProduction {
     private Worker worker;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "production_id", nullable = false)
     private Production production;
 }

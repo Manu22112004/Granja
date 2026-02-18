@@ -5,9 +5,12 @@ import org.hibernate.annotations.UuidGenerator;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,7 +34,11 @@ public class Production {
     @Column(name = "closed", nullable = false)
     private Boolean closed = false;
 
-    @OneToMany(mappedBy = "production", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "production", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    private WorkConsolidation workConsolidation;
+
+    @OneToMany
+    @JoinColumn(name = "worker_production_id", nullable = true)
     private List<WorkerProduction> workerProductions;
 
 }

@@ -21,4 +21,5 @@ public class ProductionResponse {
 
     @JsonProperty("work_consolidation_id")
     private UUID workConsolidationId;
+
 }

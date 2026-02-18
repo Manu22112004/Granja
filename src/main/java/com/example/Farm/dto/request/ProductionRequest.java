@@ -13,8 +13,7 @@ public class ProductionRequest {
     private Double totalBedsProduced;
 
     @NotNull
-    private UUID productionMatrixId;
-
-    @NotNull
     private UUID workConsolidationId;
+
+    
 }
