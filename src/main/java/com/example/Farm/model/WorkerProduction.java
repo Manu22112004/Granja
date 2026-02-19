@@ -31,10 +31,11 @@ public class WorkerProduction {
     @Column(name = "bonus_applied", nullable = false)
     private Boolean bonusApplied;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "worker_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "worker_id", nullable = true)
     private Worker worker;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "production_id", nullable = true)
     private Production production;
 }

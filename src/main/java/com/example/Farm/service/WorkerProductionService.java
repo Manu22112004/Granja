@@ -39,30 +39,37 @@ public class WorkerProductionService {
         return WorkerProductionMapper.toResponse(findWorkerProductionOrThrow(id));
     }
 
-    public WorkerProductionResponse assignBeds(WorkerProductionRequest req) {
-        WorkerProduction wp = WorkerProductionMapper.toEntity(req);
-        Worker worker = findWorkerOrThrow(req.getWorkerId());
-        Production production = findProductionOrThrow(req.getProductionId());
-
-        wp.setWorker(worker);
-        wp.setProduction(production);
-
-        return WorkerProductionMapper.toResponse(workerProductionRepository.save(wp));
-    }
-
-    public WorkerProductionResponse updateBeds(UUID id, Double bedsAssigned) {
-        WorkerProduction wp = findWorkerProductionOrThrow(id);
-        wp.setBedsAssigned(bedsAssigned);
-        return WorkerProductionMapper.toResponse(wp);
-    }
-
     public WorkerProductionResponse create(WorkerProductionRequest req) {
         WorkerProduction wp = WorkerProductionMapper.toEntity(req);
-        return WorkerProductionMapper.toResponse(workerProductionRepository.save(wp));
+        Production production = findProductionOrThrow(req.getProductionId());
+
+        if(wp.getProduction() != null) {
+            throw new IllegalStateException("WorkerProduction already has a Production");
+        }
+
+        production.addWorkerProduction(wp);
+        productionRepository.save(production);
+        return WorkerProductionMapper.toResponse(wp);
+
     }
 
     public WorkerProductionResponse update(UUID id, WorkerProductionRequest req) {
         WorkerProduction wp = findWorkerProductionOrThrow(id);
+
+        if(req.getProductionId() != null &&
+           !wp.getProduction().getProductionId().equals(req.getProductionId())) {
+
+            Production production = findProductionOrThrow(req.getProductionId());
+
+            if (production.getWorkerProductions().stream()
+                    .anyMatch(existingWp -> !existingWp.getWorkerProductionId().equals(id))) {
+                throw new IllegalStateException("Production already has a different WorkerProduction");
+            }
+
+            wp.setProduction(production);
+            wp.getProduction().getWorkerProductions().add(wp);
+        }
+
         WorkerProductionMapper.copyToEntity(req, wp);
         return WorkerProductionMapper.toResponse(wp);
     }

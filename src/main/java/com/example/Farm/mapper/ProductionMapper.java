@@ -16,6 +16,14 @@ public final class ProductionMapper {
                 .productionId(production.getProductionId())
                 .totalBedsProduced(production.getTotalBedsProduced())
                 .workConsolidationId(production.getWorkConsolidation() != null ? production.getWorkConsolidation().getWorkConsolidationId() : null)
+                .workerProductions(
+                    production.getWorkerProductions() != null
+                        ? production.getWorkerProductions()
+                            .stream()
+                            .map(wp -> wp.getWorkerProductionId())
+                            .toList()
+                        : List.of()
+                )
                 .build();
 
     }

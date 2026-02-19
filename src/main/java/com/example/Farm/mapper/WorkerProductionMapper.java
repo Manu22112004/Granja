@@ -17,9 +17,9 @@ public final class WorkerProductionMapper {
                 .bedsAssigned(wp.getBedsAssigned())
                 .bonusApplied(wp.getBonusApplied())
                 .workerId(
-                        wp.getWorker() != null
-                                ? wp.getWorker().getPersonId()
-                                : null
+                    wp.getWorker() != null
+                            ? wp.getWorker().getPersonId()
+                            : null
                 )
                 .productionId(
                         wp.getProduction() != null

@@ -30,7 +30,10 @@ public class ProductionService {
         return ProductionMapper.toResponseList(productionRepository.findAll());
     }
 
+    @Transactional
     public ProductionResponse getById(UUID id) {
+        Production production = productionRepository.findById(id).orElseThrow();
+        production.getWorkerProductions().size(); // Force loading of workerProductions
         return ProductionMapper.toResponse(findProductionOrThrow(id));
     }
 

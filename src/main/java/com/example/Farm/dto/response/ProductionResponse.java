@@ -1,5 +1,7 @@
 package com.example.Farm.dto.response;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -21,5 +23,8 @@ public class ProductionResponse {
 
     @JsonProperty("work_consolidation_id")
     private UUID workConsolidationId;
+
+    @Builder.Default
+    private List<UUID> workerProductions = new ArrayList<>();
 
 }
