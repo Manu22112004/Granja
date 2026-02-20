@@ -1,21 +1,19 @@
 package com.example.Farm.dto.response;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
+@EqualsAndHashCode(callSuper = true)
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class WorkerResponse {
-
-    @JsonProperty("worker_id")
-    private UUID workerId;
+public class WorkerResponse extends PersonResponse {
 
     @JsonProperty("employee_number")
     private String employeeNumber;
@@ -26,6 +24,4 @@ public class WorkerResponse {
     @JsonProperty("hourly_rate")
     private BigDecimal hourlyRate;
 
-    @JsonProperty("active")
-    private Boolean active;
 }

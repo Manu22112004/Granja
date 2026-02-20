@@ -5,9 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class WorkerRequest {
+@EqualsAndHashCode(callSuper = true)
+public class WorkerRequest extends PersonRequest {
 
     @NotBlank
     private String employeeNumber;
@@ -18,7 +20,4 @@ public class WorkerRequest {
     @NotNull
     @Positive
     private BigDecimal hourlyRate;
-
-    @NotNull
-    private Boolean active;
 }

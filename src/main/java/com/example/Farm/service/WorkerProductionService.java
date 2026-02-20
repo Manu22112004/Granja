@@ -9,25 +9,20 @@ import com.example.Farm.dto.response.WorkerProductionResponse;
 import com.example.Farm.exception.ResourceNotFoundException;
 import com.example.Farm.mapper.WorkerProductionMapper;
 import com.example.Farm.model.Production;
-import com.example.Farm.model.Worker;
 import com.example.Farm.model.WorkerProduction;
 import com.example.Farm.repository.ProductionRepository;
 import com.example.Farm.repository.WorkerProductionRepository;
-import com.example.Farm.repository.WorkerRepository;
 
 @Service
 @Transactional
 public class WorkerProductionService {
 
     private final WorkerProductionRepository workerProductionRepository;
-    private final WorkerRepository workerRepository;
     private final ProductionRepository productionRepository;
 
     public WorkerProductionService(WorkerProductionRepository workerProductionRepository,
-                                   WorkerRepository workerRepository,
                                    ProductionRepository productionRepository) {
         this.workerProductionRepository = workerProductionRepository;
-        this.workerRepository = workerRepository;
         this.productionRepository = productionRepository;
     }
 
@@ -77,11 +72,6 @@ public class WorkerProductionService {
     private WorkerProduction findWorkerProductionOrThrow(UUID id) {
         return workerProductionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("WorkerProduction", "id", id));
-    }
-
-    private Worker findWorkerOrThrow(UUID id) {
-        return workerRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Worker", "id", id));
     }
 
     private Production findProductionOrThrow(UUID id) {

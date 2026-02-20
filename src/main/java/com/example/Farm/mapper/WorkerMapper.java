@@ -13,11 +13,13 @@ public final class WorkerMapper {
         if (worker == null) return null;
 
         return WorkerResponse.builder()
-                .workerId(worker.getPersonId())
+                .personId(worker.getPersonId())
+                .firstName(worker.getFirstName())
+                .lastName(worker.getLastName())
+                .active(worker.getActive())
                 .employeeNumber(worker.getEmployeeNumber())
                 .skillLevel(worker.getSkillLevel())
                 .hourlyRate(worker.getHourlyRate())
-                .active(worker.getActive())
                 .build();
     }
 
@@ -29,6 +31,7 @@ public final class WorkerMapper {
     public static Worker toEntity(WorkerRequest request) {
         if (request == null) return null;
         Worker worker = new Worker();
+        PersonMapper.apply(request, worker);
         apply(request, worker);
         return worker;
     }
@@ -42,6 +45,5 @@ public final class WorkerMapper {
         if (request.getEmployeeNumber() != null) worker.setEmployeeNumber(request.getEmployeeNumber());
         if (request.getSkillLevel() != null) worker.setSkillLevel(request.getSkillLevel());
         if (request.getHourlyRate() != null) worker.setHourlyRate(request.getHourlyRate());
-        if (request.getActive() != null) worker.setActive(request.getActive());
     }
 }

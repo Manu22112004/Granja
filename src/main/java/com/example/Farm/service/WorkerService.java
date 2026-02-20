@@ -2,10 +2,8 @@ package com.example.Farm.service;
 
 import java.util.List;
 import java.util.UUID;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.example.Farm.dto.request.WorkerRequest;
 import com.example.Farm.dto.response.WorkerResponse;
 import com.example.Farm.exception.ResourceNotFoundException;
@@ -38,18 +36,14 @@ public class WorkerService {
 
     public WorkerResponse update(UUID id, WorkerRequest req) {
         Worker worker = findWorkerOrThrow(id);
+
+        // Fields for update a person
+        worker.setFirstName(req.getFirstName());
+        worker.setLastName(req.getLastName());
+        worker.setActive(req.getActive());
+
         WorkerMapper.copyToEntity(req, worker);
         return WorkerMapper.toResponse(worker);
-    }
-
-    public void deactivate(UUID id) {
-        Worker worker = findWorkerOrThrow(id);
-        worker.setActive(false);
-    }
-
-    public void delete(UUID id) {
-        Worker worker = findWorkerOrThrow(id);
-        workerRepository.delete(worker);
     }
 
     private Worker findWorkerOrThrow(UUID id) {
