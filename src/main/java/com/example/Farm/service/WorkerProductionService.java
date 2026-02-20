@@ -9,9 +9,11 @@ import com.example.Farm.dto.response.WorkerProductionResponse;
 import com.example.Farm.exception.ResourceNotFoundException;
 import com.example.Farm.mapper.WorkerProductionMapper;
 import com.example.Farm.model.Production;
+import com.example.Farm.model.Worker;
 import com.example.Farm.model.WorkerProduction;
 import com.example.Farm.repository.ProductionRepository;
 import com.example.Farm.repository.WorkerProductionRepository;
+import com.example.Farm.repository.WorkerRepository;
 
 @Service
 @Transactional
@@ -19,11 +21,14 @@ public class WorkerProductionService {
 
     private final WorkerProductionRepository workerProductionRepository;
     private final ProductionRepository productionRepository;
+    private final WorkerRepository workerRepository;
 
     public WorkerProductionService(WorkerProductionRepository workerProductionRepository,
-                                   ProductionRepository productionRepository) {
+                                   ProductionRepository productionRepository,
+                                   WorkerRepository workerRepository) {
         this.workerProductionRepository = workerProductionRepository;
         this.productionRepository = productionRepository;
+        this.workerRepository = workerRepository;
     }
 
     public List<WorkerProductionResponse> getAll() {
@@ -37,13 +42,19 @@ public class WorkerProductionService {
     public WorkerProductionResponse create(WorkerProductionRequest req) {
         WorkerProduction wp = WorkerProductionMapper.toEntity(req);
         Production production = findProductionOrThrow(req.getProductionId());
+        Worker wk = findWorkerOrThrow(req.getWorkerId());
 
         if(wp.getProduction() != null) {
             throw new IllegalStateException("WorkerProduction already has a Production");
         }
 
+        wp.setWorker(wk);
+        wp.setProduction(production);
+       
         production.addWorkerProduction(wp);
-        productionRepository.save(production);
+        
+        workerProductionRepository.save(wp);
+        
         return WorkerProductionMapper.toResponse(wp);
 
     }
@@ -52,7 +63,7 @@ public class WorkerProductionService {
         WorkerProduction wp = findWorkerProductionOrThrow(id);
 
         if(req.getProductionId() != null &&
-           !wp.getProduction().getProductionId().equals(req.getProductionId())) {
+            !wp.getProduction().getProductionId().equals(req.getProductionId())) {
 
             Production production = findProductionOrThrow(req.getProductionId());
 
@@ -63,6 +74,14 @@ public class WorkerProductionService {
 
             wp.setProduction(production);
             wp.getProduction().getWorkerProductions().add(wp);
+        }
+
+        if (req.getWorkerId() != null &&
+            (wp.getWorker() == null ||
+            !req.getWorkerId().equals(wp.getWorker().getPersonId()))) {
+
+            Worker worker = findWorkerOrThrow(req.getWorkerId());
+            wp.setWorker(worker);
         }
 
         WorkerProductionMapper.copyToEntity(req, wp);
@@ -77,5 +96,10 @@ public class WorkerProductionService {
     private Production findProductionOrThrow(UUID id) {
         return productionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Production", "id", id));
+    }
+
+    private Worker findWorkerOrThrow(UUID id) {
+        return workerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Worker", "id", id));
     }
 }

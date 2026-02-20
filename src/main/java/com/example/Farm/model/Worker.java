@@ -21,4 +21,5 @@ public class Worker extends Person {
 
     @Column(name = "hourly_rate", precision = 10, scale = 2, nullable = false)
     private BigDecimal hourlyRate;
+
 }
