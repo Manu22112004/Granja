@@ -12,6 +12,7 @@ import com.example.Farm.dto.request.ProductionBonusPolicyRequest;
 import com.example.Farm.dto.response.ProductionBonusPolicyResponse;
 import com.example.Farm.service.ProductionBonusPolicyService;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/production-bonus-policies")
 @Tag(name = "Production Bonus Policies", description = "Operations related to production bonus policies")

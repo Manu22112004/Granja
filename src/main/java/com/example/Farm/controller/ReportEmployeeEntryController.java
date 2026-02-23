@@ -12,6 +12,7 @@ import com.example.Farm.dto.request.ReportEmployeeEntryRequest;
 import com.example.Farm.dto.response.ReportEmployeeEntryResponse;
 import com.example.Farm.service.ReportEmployeeEntryService;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/report-employee-entries")
 @Tag(name = "Report Employee Entries", description = "Operations related to report employee entries")

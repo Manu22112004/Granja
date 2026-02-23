@@ -12,6 +12,7 @@ import com.example.Farm.dto.request.CustomerRequest;
 import com.example.Farm.dto.response.CustomerResponse;
 import com.example.Farm.service.CustomerService;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/customers")
 @Tag(name = "Customers", description = "Operations related to customers")

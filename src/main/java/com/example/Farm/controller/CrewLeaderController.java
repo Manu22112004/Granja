@@ -12,6 +12,7 @@ import com.example.Farm.dto.request.CrewLeaderRequest;
 import com.example.Farm.dto.response.CrewLeaderResponse;
 import com.example.Farm.service.CrewLeaderService;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/crew-leaders")
 @Tag(name = "Crew Leaders", description = "Operations related to crew leaders")

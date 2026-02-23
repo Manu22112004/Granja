@@ -3,6 +3,9 @@ package com.example.Farm.dto.request;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
@@ -11,6 +14,7 @@ import lombok.Data;
 public class WorkConsolidationRequest {
 
     @NotNull
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate workDate;
 
     @NotNull

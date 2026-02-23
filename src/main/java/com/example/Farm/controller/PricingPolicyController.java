@@ -12,6 +12,7 @@ import com.example.Farm.dto.request.PricingPolicyRequest;
 import com.example.Farm.dto.response.PricingPolicyResponse;
 import com.example.Farm.service.PricingPolicyService;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/pricing-policies")
 @Tag(name = "Pricing Policies", description = "Operations related to pricing policies")

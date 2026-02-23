@@ -14,6 +14,7 @@ import com.example.Farm.dto.request.PlannedBedRequest;
 import com.example.Farm.dto.response.PlannedBedResponse;
 import com.example.Farm.service.PlannedBedService;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/planned-beds")
 @Tag(name = "Planned Beds", description = "Operations related to planned beds")

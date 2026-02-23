@@ -1,5 +1,6 @@
 package com.example.Farm.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -28,6 +29,7 @@ public class WorkConsolidation {
     private UUID workConsolidationId;
 
     @Column(name = "work_date", nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate workDate;
 
     @Column(name = "pull_type", nullable = false, length = 20)

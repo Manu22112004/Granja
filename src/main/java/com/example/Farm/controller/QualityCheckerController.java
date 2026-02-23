@@ -12,6 +12,7 @@ import com.example.Farm.dto.request.QualityCheckerRequest;
 import com.example.Farm.dto.response.QualityCheckerResponse;
 import com.example.Farm.service.QualityCheckerService;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/quality-checkers")
 @Tag(name = "Quality Checkers", description = "Operations related to quality checkers")

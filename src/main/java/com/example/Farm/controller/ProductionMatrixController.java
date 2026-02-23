@@ -12,6 +12,7 @@ import com.example.Farm.dto.request.ProductionMatrixRequest;
 import com.example.Farm.dto.response.ProductionMatrixResponse;
 import com.example.Farm.service.ProductionMatrixService;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/production-matrices")
 @Tag(name = "Production Matrices", description = "Operations related to production matrices")

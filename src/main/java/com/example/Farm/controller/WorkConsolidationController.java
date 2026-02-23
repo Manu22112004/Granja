@@ -12,6 +12,7 @@ import com.example.Farm.dto.request.WorkConsolidationRequest;
 import com.example.Farm.dto.response.WorkConsolidationResponse;
 import com.example.Farm.service.WorkConsolidationService;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/work-consolidations")
 @Tag(name = "Work Consolidations", description = "Operations related to work consolidations")
