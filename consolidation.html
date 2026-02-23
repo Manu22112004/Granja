@@ -123,98 +123,10 @@
 
     <!-- CONTENT -->
     <main class="content">
-    <h1 class="page-title">Consolidated</h1>
+    <h1 class="page-title">Work Consolidations</h1>
 
     <!-- TOP FILTER / CONTEXT KPIs -->
-    <section class="dashboard-kpis">
-        <div class="kpi-card">
-            <span class="kpi-label">Company</span>
-            <span class="kpi-value">Rancho Norte</span>
-        </div>
-        <div class="kpi-card">
-            <span class="kpi-label">Customer</span>
-            <span class="kpi-value">Campo Florida</span>
-        </div>
-
-        <div class="kpi-card">
-            <span class="kpi-label">Crew Leader</span>
-            <span class="kpi-value">Luis Hernández</span>
-        </div>
-
-        <div class="kpi-card">
-            <span class="kpi-label">Quality Checker</span>
-            <span class="kpi-value">Fernando</span>
-        </div>
-
-        <div class="kpi-card">
-            <span class="kpi-label">Workers</span>
-            <span class="kpi-value">30</span>
-        </div>
-
-        <div class="kpi-card">
-            <span class="kpi-label">Start</span>
-            <span class="kpi-value">31</span>
-        </div>
-
-        <div class="kpi-card">
-            <span class="kpi-label">Price/hour</span>
-            <span class="kpi-value">$18,10</span>
-        </div>
-        <div class="kpi-card">
-            <span class="kpi-label">Price/Acree</span>
-            <span class="kpi-value">$45,00</span>
-        </div>
-        
-    </section>
-
-    <!-- MAIN CONSOLIDATION TABLE -->
-    <section class="dashboard-card wide" style="margin-top: 24px;">
-        <h3>👷 30 Workers Active</h3>
-
-        <div class="dashboard-card" style="padding: 0; box-shadow: none; background: transparent;">
-
-            <table style="width:100%; border-collapse: collapse; font-size: 16px;">
-                <thead>
-                    <tr style="text-align:left; color: var(--malachite-700); font-weight:600;">
-                        <th style="padding: 10px 12px;">Num</th>
-                        <th style="padding: 10px 12px;">Worker</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>31</td><td>Juan Morales Hernandez</td></tr>
-                    <tr><td>32</td><td>Rigoberto Mendez Gonzalez</td></tr>
-                    <tr><td>33</td><td>Ricardo Bello Andrade</td></tr>
-                    <tr><td>34</td><td>Joel Contreras Mendez</td></tr>
-                    <tr><td>35</td><td>Jacinto Mendez Lopez</td></tr>
-                    <tr><td>36</td><td>Maximiliano Hernandez Cano</td></tr>
-                    <tr><td>37</td><td>Ramon Gamino Seseña</td></tr>
-                    <tr><td>38</td><td>Adrian Bautista Gonzalez</td></tr>
-                    <tr><td>39</td><td>Salvador Gonzalez Lopez</td></tr>
-                    <tr><td>40</td><td>Elias Ramiro Ramirez</td></tr>
-                    <tr><td>41</td><td>Pedro Manzanarez Mendoza</td></tr>
-                    <tr><td>42</td><td>Efren Mendez Elias</td></tr>
-                    <tr><td>43</td><td>Macario Hernandez Bautista</td></tr>
-                    <tr><td>44</td><td>Patricio Vazquez Lucas</td></tr>
-                    <tr><td>45</td><td>Eulogio Peralta Bermudez</td></tr>
-                    <tr><td>46</td><td>Antonio Gonzalez Rodriguez</td></tr>
-                    <tr><td>47</td><td>Edgar Mendez Apolinar</td></tr>
-                    <tr><td>48</td><td>Francisco Gonzalez Rodriguez</td></tr>
-                    <tr><td>49</td><td>Saul Tellez Mendez</td></tr>
-                    <tr><td>50</td><td>Rodolfo Espiritu Garcia</td></tr>
-                    <tr><td>51</td><td>Fernando Espiritu Vazquez</td></tr>
-                    <tr><td>52</td><td>Luis Enrique Picon Cazares</td></tr>
-                    <tr><td>53</td><td>Rigoberto Vazquez Lopez</td></tr>
-                    <tr><td>54</td><td>Gerardo Moreno Hernandez</td></tr>
-                    <tr><td>55</td><td>Ismael Moreno Perez</td></tr>
-                    <tr><td>56</td><td>Melquiadez Rodolfo Landero</td></tr>
-                    <tr><td>57</td><td>Apolinar Gonzalez Tellez</td></tr>
-                    <tr><td>58</td><td>Miguel Antonio Fernandez Perez</td></tr>
-                    <tr><td>59</td><td>Alejandro Ricañon Bello</td></tr>
-                    <tr><td>60</td><td>Daniel Martinez Martinez</td></tr>
-                </tbody>
-            </table>
-
-        </div>
+    <section class="dashboard-kpis" id="consolidationsContainer">
     </section>
 
 </main>
@@ -222,6 +134,50 @@
 
 
 <script src="sidebar.js"></script>
+<script src="scripts/createConsolidation.js"></script>
+<script src="scripts/getAllConsolidations.js"></script>
+
+<button class="fab-add" onclick="openModal()">
+    +
+</button>
+
+<!-- OVERLAY OSCURO -->
+<div id="modalOverlay" class="modal-overlay hidden"></div>
+
+<!-- MODAL FORM -->
+<div id="consolidationModal" class="modal hidden">
+
+    <div class="modal-header">
+        <h2>Create Work Consolidation</h2>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+
+    <form id="consolidationForm" class="modal-form">
+
+        <div class="form-group">
+            <label>Max Time</label>
+            <input type="number" id="maxTime" min="0" step="1" required>
+        </div>
+
+        <div class="form-group">
+            <label>Total Beds Planned</label>
+            <input type="number" id="totalBedsPlanned" min="0" step="1" required>
+        </div>
+
+        <div class="form-group">
+            <label>Company</label>
+            <select id="companySelect" required></select>
+        </div>
+
+        <div class="form-group">
+            <label>Customer</label>
+            <select id="customerSelect" required></select>
+        </div>
+
+        <button type="submit" class="btn-primary">Create Consolidation</button>
+
+    </form>
+</div>
 
 </body>
 </html>

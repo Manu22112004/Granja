@@ -593,3 +593,198 @@ body {
     color: var(--malachite-700);
     text-align: right;
 }
+
+/* =========================
+            BUTTONS
+   ========================= */
+
+.fab-add {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    font-size: 30px;
+    color: white;
+    background-color: #22c55e;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.fab-add:hover {
+    transform: scale(1.1);
+    background-color: #16a34a;
+}
+
+/* =========================
+   MODAL OVERLAY
+========================= */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.2);
+    z-index: 999;
+}
+
+/* =========================
+   MODAL WINDOW
+========================= */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    width: 420px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* ocultar */
+.hidden {
+    display: none;
+}
+
+/* header */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* close button */
+.modal-close {
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* form */
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--malachite-700);
+    text-transform: uppercase;
+}
+
+/* inputs */
+.form-group input,
+.form-group select {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--malachite-200);
+    background: var(--malachite-50);
+    font-size: 14px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--malachite-400);
+    box-shadow: 0 0 0 3px rgba(68,225,60,0.15);
+}
+
+/* submit */
+.btn-primary {
+    background: var(--malachite-600);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background: var(--malachite-700);
+}
+
+/* =========================
+   CONSOLIDATION ROWS
+========================= */
+
+.consolidation-card {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.consolidation-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.overlay-select {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 128, 0, 0.75);
+    color: white;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    border-radius: 12px;
+    transition: opacity 0.3s ease;
+}
+
+.consolidation-card:hover .overlay-select {
+    opacity: 1;
+}
+
+/* =========================
+   KPI DETAILS
+========================= */
+
+.kpi-card {
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.kpi-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* =========================
+   WORKER TABLE
+========================= */
+
+/* =========================
+   WORKERS TABLE
+========================= */
+
+#workersTableBody tr {
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+#workersTableBody tr:hover {
+    background-color: #f2f6ff;
+    transform: scale(1.01);
+}
