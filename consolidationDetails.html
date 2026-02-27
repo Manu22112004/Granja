@@ -123,7 +123,10 @@
 
     <!-- CONTENT -->
     <main class="content">
-    <h1 class="page-title">Consolidated</h1>
+    <div class="page-header">
+        <h1 class="page-title">Consolidated</h1>
+        <button id="editConsolidationBtn" class="edit-btn">Edit</button>
+    </div>
 
     <!-- TOP FILTER / CONTEXT KPIs -->
     <section class="dashboard-kpis">
@@ -184,19 +187,50 @@
                     </tr>
                 </thead>
                 <tbody id="workersTableBody">
-                    <tr><td>31</td><td>Juan Morales Hernandez</td></tr>
                 </tbody>
             </table>
 
         </div>
     </section>
 
+    
 </main>
 
+<!-- UPDATE CONSOLIDATION -->
+<div id="modalConsolidation" class="modal-consolidation">
+    <div class="modal-consolidation-content">
+        <span id="closeModalConsolidation" class="close-btn">&times;</span>
+        <h2>Edit Consolidation</h2>
+
+        <form id="editForm">
+
+            <label>Work Date</label>
+            <input type="date" id="edit_work_date">
+
+            <label>Total Beds Produced</label>
+            <input type="number" id="edit_total_beds_produced">
+
+            <label>Company</label>
+            <select id="edit_company_id"></select>
+
+            <label>Customer</label>
+            <select id="edit_customer_id"></select>
+
+            <label>Crew Leader</label>
+            <select id="edit_crew_leader_id"></select>
+
+            <label>Quality Checker</label>
+            <select id="edit_quality_checker_id"></select>
+
+            <button type="button" class="save-btn">Save Changes</button>
+        </form>
+    </div>
+</div>
 
 
 <script src="sidebar.js"></script>
 <script src="scripts/consolidationDetails.js"></script>
+<script src="scripts/updateConsolidation.js"></script>
 
 </body>
 </html>

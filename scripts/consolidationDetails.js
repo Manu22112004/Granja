@@ -1,150 +1,157 @@
+let currentConsolidation = null;
+
 const API_BASE = "http://localhost:8082/api";
 const API_URL = `${API_BASE}/work-consolidations`;
 
-document.addEventListener("DOMContentLoaded", loadConsolidationDetail);
-document.addEventListener("DOMContentLoaded", enableKpiSelection);
+/* =========================
+   INIT
+========================= */
+
+document.addEventListener("DOMContentLoaded", async () => {
+    enableKpiSelection();
+    await loadConsolidationDetail();
+    setupModal();
+});
+
+/* =========================
+   LOAD CONSOLIDATION
+========================= */
 
 async function loadConsolidationDetail() {
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get("id");
-
+    const id = new URLSearchParams(window.location.search).get("id");
     if (!id) return;
 
     try {
-        // 1️⃣ Traer consolidation
         const response = await fetch(`${API_URL}/${id}`);
-        const consolidation = await response.json();
+        if (!response.ok) throw new Error("Failed to load consolidation");
 
-        console.log("Consolidation:", consolidation);
+        currentConsolidation = await response.json();
 
-        // 2️⃣ Traer datos relacionados en paralelo
+        // Helper: fetch solo si hay id, si no devuelve null
+        const safeFetch = (url, id) => id ? fetchJson(`${url}/${id}`) : Promise.resolve(null);
+
         const [
-            companyRes,
-            customerRes,
-            crewLeaderRes,
-            qualityCheckerRes,
-            pricingPolicyRes
+            company,
+            customer,
+            crewLeader,
+            qualityChecker,
+            pricingPolicy
         ] = await Promise.all([
-            fetch(`${API_BASE}/companies/${consolidation.company_id}`),
-            fetch(`${API_BASE}/customers/${consolidation.customer_id}`),
-            fetch(`${API_BASE}/crew-leaders/${consolidation.crew_leader_id}`),
-            fetch(`${API_BASE}/quality-checkers/${consolidation.quality_checker_id}`),
-            fetch(`${API_BASE}/pricing-policies/${consolidation.pricing_policy_id}`)
+            safeFetch("/companies", currentConsolidation.company_id),
+            safeFetch("/customers", currentConsolidation.customer_id),
+            safeFetch("/crew-leaders", currentConsolidation.crew_leader_id),
+            safeFetch("/quality-checkers", currentConsolidation.quality_checker_id),
+            safeFetch("/pricing-policies", currentConsolidation.pricing_policy_id)
         ]);
 
-        const company = await companyRes.json();
-        const customer = await customerRes.json();
-        const crewLeader = await crewLeaderRes.json();
-        const qualityChecker = await qualityCheckerRes.json();
-        const pricingPolicy = await pricingPolicyRes.json();
+        renderKpis(
+            company ?? "-",
+            customer ?? "-",
+            crewLeader ?? "-",
+            qualityChecker ?? "-",
+            pricingPolicy ?? "-"
+        );
 
-        // 3️⃣ Insertar datos en los KPI
-
-        document.getElementById("companyName").textContent = company.name;
-        document.getElementById("customerName").textContent = customer.name;
-        document.getElementById("crewLeader").textContent = `${crewLeader.first_name} ${crewLeader.last_name}`;
-        document.getElementById("qualityChecker").textContent = `${qualityChecker.first_name} ${qualityChecker.last_name}`;
-
-        document.getElementById("bedsProduced").textContent =
-            consolidation.total_beds_produced;
-
-        document.getElementById("startDate").textContent =
-            formatDate(consolidation.work_date);
-
-        document.getElementById("priceHour").textContent =
-            `$${pricingPolicy.price_per_hour}`;
-
-        document.getElementById("priceBed").textContent =
-            `$${pricingPolicy.price_per_bed}`;
-
-        await loadWorkersFromProduction(consolidation.production_id);
+        if (currentConsolidation.production_id) {
+            await loadWorkersFromProduction(currentConsolidation.production_id);
+        }
 
     } catch (error) {
         console.error("Error loading consolidation:", error);
     }
 }
 
+function renderKpis(company, customer, crewLeader, qualityChecker, pricingPolicy) {
+    document.getElementById("companyName").textContent = company.name;
+    document.getElementById("customerName").textContent = customer.name;
+    document.getElementById("crewLeader").textContent =
+        `${crewLeader.first_name} ${crewLeader.last_name}`;
+    document.getElementById("qualityChecker").textContent =
+        `${qualityChecker.first_name} ${qualityChecker.last_name}`;
+
+    document.getElementById("bedsProduced").textContent =
+        currentConsolidation.total_beds_produced;
+
+    document.getElementById("startDate").textContent =
+        formatDate(currentConsolidation.work_date);
+
+    document.getElementById("priceHour").textContent =
+    pricingPolicy ? `$${pricingPolicy.price_per_hour}` : "—";
+
+    document.getElementById("priceBed").textContent =
+    pricingPolicy ? `$${pricingPolicy.price_per_bed}` : "—";
+}
+
+function formatDate(dateString) {
+    return new Date(dateString).toLocaleDateString();
+}
+
+async function fetchJson(endpoint) {
+    const response = await fetch(`${API_BASE}${endpoint}`);
+    if (!response.ok) throw new Error(`Error fetching ${endpoint}`);
+    return response.json();
+}
+
 function enableKpiSelection() {
-
-    const cards = document.querySelectorAll(".kpi-card");
-
-    cards.forEach(card => {
-
-        // Evento click
+    document.querySelectorAll(".kpi-card").forEach(card => {
         card.addEventListener("click", () => {
             const label = card.querySelector(".kpi-label").textContent;
             const value = card.querySelector(".kpi-value").textContent;
-
             alert(`Seleccionaste:\n${label}: ${value}`);
         });
-
     });
 }
 
+/* =========================
+   LOAD WORKERS
+========================= */
+
 async function loadWorkersFromProduction(productionId) {
-
     try {
-
-        // 1️⃣ Traer production
-        const productionRes = await fetch(
-            `${API_BASE}/productions/${productionId}`
-        );
-
-        const production = await productionRes.json();
-
+        const production = await fetchJson(`/productions/${productionId}`);
         const workerProductionIds = production.workerProductions || [];
 
-        // 2️⃣ Traer todas las workerProductions en paralelo
-        const workerProductionResponses = await Promise.all(
-            workerProductionIds.map(id =>
-                fetch(`${API_BASE}/worker-productions/${id}`)
-            )
-        );
-
         const workerProductions = await Promise.all(
-            workerProductionResponses.map(res => res.json())
+            workerProductionIds.map(id =>
+                fetchJson(`/worker-productions/${id}`)
+            )
         );
 
-        // 3️⃣ Traer todos los workers en paralelo
-        const workerResponses = await Promise.all(
-            workerProductions.map(wp =>
-                fetch(`${API_BASE}/workers/${wp.worker_id}`)
-            )
+        const validWorkerProductions = workerProductions.filter(
+            wp => wp.worker_id !== null && wp.worker_id !== undefined
         );
 
         const workers = await Promise.all(
-            workerResponses.map(res => res.json())
+            validWorkerProductions.map(wp =>
+                fetchJson(`/workers/${wp.worker_id}`)
+            )
         );
 
-        // 4️⃣ Pintar tabla
-        const tbody = document.getElementById("workersTableBody");
-        tbody.innerHTML = "";
-
-        workers.forEach((worker, index) => {
-
-            const row = document.createElement("tr");
-
-            row.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${worker.first_name} ${worker.last_name}</td>
-            `;
-
-            row.addEventListener("click", () => {
-                alert(`Worker seleccionado:\n${worker.first_name} ${worker.last_name}`);
-            });
-
-            tbody.appendChild(row);
-        });
-
-        // 5️⃣ Actualizar contador
-        document.getElementById("workersTitle").textContent =
-            `👷 ${workers.length} Workers Active`;
+        renderWorkers(workers);
 
     } catch (error) {
         console.error("Error loading workers:", error);
     }
 }
 
-function formatDate(dateString) {
-    return new Date(dateString).toLocaleDateString();
+function renderWorkers(workers) {
+    const tbody = document.getElementById("workersTableBody");
+    tbody.innerHTML = "";
+
+    workers.forEach((worker, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${worker.first_name} ${worker.last_name}</td>
+        `;
+
+        row.addEventListener("click", () => {
+            alert(`Worker seleccionado:\n${worker.first_name} ${worker.last_name}`);
+        });
+
+        tbody.appendChild(row);
+    });
+
+    document.getElementById("workersTitle").textContent =
+        `👷 ${workers.length} Workers Active`;
 }
