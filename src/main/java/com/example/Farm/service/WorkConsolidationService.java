@@ -68,59 +68,60 @@ public class WorkConsolidationService {
     public WorkConsolidationResponse getById(UUID id) {
         return WorkConsolidationMapper.toResponse(findConsolidationOrThrow(id));
     }
+public WorkConsolidationResponse create(WorkConsolidationRequest req) {
 
-    public WorkConsolidationResponse create(WorkConsolidationRequest req) {
+    WorkConsolidation consolidation =
+            WorkConsolidationMapper.toEntity(req);
 
-        WorkConsolidation consolidation = WorkConsolidationMapper.toEntity(req);
+    consolidation.setCompany(findCompanyOrThrow(req.getCompanyId()));
+    consolidation.setCustomer(findCustomerOrThrow(req.getCustomerId()));
 
-        Company company = findCompanyOrThrow(req.getCompanyId());
-        Customer customer = findCustomerOrThrow(req.getCustomerId());
-
-        consolidation.setCompany(company);
-        consolidation.setCustomer(customer);
-
-        if (req.getProductionId() != null) {
-            consolidation.setProduction(
-                    findProductionOrThrow(req.getProductionId())
-            );
-        }
-
-        if (req.getProductionMatrixId() != null) {
-            consolidation.setProductionMatrix(
-                    findProductionMatrixOrThrow(req.getProductionMatrixId())
-            );
-        }
-
-        if (req.getPricingPolicyId() != null) {
-            consolidation.setPricingPolicy(
-                    findPricingPolicyOrThrow(req.getPricingPolicyId())
-            );
-        }
-
-        if (req.getProductionReportId() != null) {
-            consolidation.setProductionReport(
-                    findProductionReportOrThrow(req.getProductionReportId())
-            );
-        }
-
-        if (req.getCrewLeaderId() != null) {
-            consolidation.setCrewLeader(
-                findCrewLeaderOrThrow(req.getCrewLeaderId())
-            );
-        }
-
-        if (req.getQualityCheckerId() != null) {
-            consolidation.setQualityChecker(
-                findQualityCheckerOrThrow(req.getQualityCheckerId())
-            );
-        }
-
-
-        return WorkConsolidationMapper.toResponse(
-                workConsolidationRepository.save(consolidation)
+    if (req.getProductionMatrixId() != null) {
+        consolidation.setProductionMatrix(
+            findProductionMatrixOrThrow(req.getProductionMatrixId())
         );
     }
 
+    if (req.getPricingPolicyId() != null) {
+        consolidation.setPricingPolicy(
+            findPricingPolicyOrThrow(req.getPricingPolicyId())
+        );
+    }
+
+    if (req.getProductionReportId() != null) {
+        consolidation.setProductionReport(
+            findProductionReportOrThrow(req.getProductionReportId())
+        );
+    }
+
+    if (req.getCrewLeaderId() != null) {
+        consolidation.setCrewLeader(
+            findCrewLeaderOrThrow(req.getCrewLeaderId())
+        );
+    }
+
+    if (req.getQualityCheckerId() != null) {
+        consolidation.setQualityChecker(
+            findQualityCheckerOrThrow(req.getQualityCheckerId())
+        );
+    }
+
+    // 🔥 CLAVE: crear Production SIEMPRE
+    WorkConsolidation savedConsolidation =
+            workConsolidationRepository.save(consolidation);
+
+    Production production = new Production();
+    production.setWorkConsolidation(savedConsolidation);
+    production.setTotalBedsProduced(0.0);
+
+    production = productionRepository.save(production);
+
+    savedConsolidation.setProduction(production);
+    savedConsolidation =
+            workConsolidationRepository.save(savedConsolidation);
+
+    return WorkConsolidationMapper.toResponse(savedConsolidation);
+}
 
     @Transactional
     public WorkConsolidationResponse update(UUID id, WorkConsolidationRequest req) {
