@@ -227,6 +227,7 @@ document.getElementById("confirmAddWorkersBtn")
 
     const workerIds = Array.from(checked).map(cb => cb.value);
 
+    //sds
     try {
         // 🔴 AJUSTA este endpoint según tu backend
         const productionId = currentConsolidation.production_id;
