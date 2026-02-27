@@ -885,3 +885,82 @@ body {
 .save-btn:hover {
     background-color: #1d4ed8;
 }
+
+.btn-primary-workers {
+    background-color: var(--malachite-600);
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-primary-workers:hover {
+    background-color: var(--malachite-700);
+}
+
+.btn-danger-workers {
+    background-color: #e53935;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-danger-workers:hover {
+    background-color: #c62828;
+}
+
+.modal-overlay-workers {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content-workers {
+    background: white;
+    width: 420px;
+    max-height: 70vh;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.workers-list-workers {
+    margin-top: 12px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.worker-item-workers {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 6px;
+    border-bottom: 1px solid #eee;
+}
+
+.worker-item-workers label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.modal-actions-workers {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.hidden-workers {
+    display: none;
+}

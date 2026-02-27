@@ -175,18 +175,28 @@
 
     <!-- MAIN CONSOLIDATION TABLE -->
     <section class="dashboard-card wide" style="margin-top: 24px;">
-        <h3 id="workersTitle">👷 0 Workers Active</h3>
+
+        <!-- Header -->
+        <div style="display:flex; justify-content: space-between; align-items:center;">
+            <h3 id="workersTitle">👷 0 Workers Active</h3>
+
+            <button id="addWorkerBtn" class="btn-primary-workers">
+                ➕ Add Workers
+            </button>
+        </div>
 
         <div class="dashboard-card" style="padding: 0; box-shadow: none; background: transparent;">
 
             <table style="width:100%; border-collapse: collapse; font-size: 16px;">
                 <thead>
                     <tr style="text-align:left; color: var(--malachite-700); font-weight:600;">
-                        <th style="padding: 10px 12px;">Num</th>
+                        <th style="padding: 10px 12px; width:80px;">Num</th>
                         <th style="padding: 10px 12px;">Worker</th>
+                        <th style="padding: 10px 12px; width:120px; text-align:center;">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="workersTableBody">
+                    <!-- filas dinámicas -->
                 </tbody>
             </table>
 
@@ -196,7 +206,7 @@
     
 </main>
 
-<!-- UPDATE CONSOLIDATION -->
+<!-- UPDATE CONSOLIDATION MODAL-->
 <div id="modalConsolidation" class="modal-consolidation">
     <div class="modal-consolidation-content">
         <span id="closeModalConsolidation" class="close-btn">&times;</span>
@@ -224,6 +234,26 @@
 
             <button type="button" class="save-btn">Save Changes</button>
         </form>
+    </div>
+</div>
+
+<!-- ADD WORKERS MODAL -->
+<div id="addWorkersModal" class="modal-overlay-workers hidden-workers">
+    <div class="modal-content-workers">
+        <h3>➕ Add Workers</h3>
+
+        <div id="availableWorkersList" class="workers-list-workers">
+            <!-- lista dinámica -->
+        </div>
+
+        <div class="modal-actions-workers">
+            <button id="confirmAddWorkersBtn" class="btn-primary-workers">
+                Add Selected
+            </button>
+            <button id="closeAddWorkersModal" class="btn-danger-workers">
+                Cancel
+            </button>
+        </div>
     </div>
 </div>
 

@@ -1,5 +1,8 @@
 let currentConsolidation = null;
 
+let currentWorkers = [];
+let allWorkersCache = [];
+
 const API_BASE = "http://localhost:8082/api";
 const API_URL = `${API_BASE}/work-consolidations`;
 
@@ -135,6 +138,7 @@ async function loadWorkersFromProduction(productionId) {
 }
 
 function renderWorkers(workers) {
+    currentWorkers = workers;
     const tbody = document.getElementById("workersTableBody");
     tbody.innerHTML = "";
 
@@ -155,3 +159,98 @@ function renderWorkers(workers) {
     document.getElementById("workersTitle").textContent =
         `👷 ${workers.length} Workers Active`;
 }
+
+//Tabla workers
+
+document.getElementById("addWorkerBtn").addEventListener("click", async () => {
+    await openAddWorkersModal();
+});
+
+async function openAddWorkersModal() {
+    const modal = document.getElementById("addWorkersModal");
+    const list = document.getElementById("availableWorkersList");
+
+    modal.classList.remove("hidden-workers");
+    list.innerHTML = "Loading workers...";
+
+    if (allWorkersCache.length === 0) {
+        allWorkersCache = await fetchJson("/workers");
+    }
+
+    const activeIds = new Set(currentWorkers.map(w => w.id));
+
+    const availableWorkers = allWorkersCache.filter(
+        w => !activeIds.has(w.id)
+    );
+
+    if (availableWorkers.length === 0) {
+        list.innerHTML = "<p>No available workers</p>";
+        return;
+    }
+
+    list.innerHTML = "";
+
+    availableWorkers.forEach(worker => {
+        const div = document.createElement("div");
+        div.className = "worker-item-workers";
+
+        div.innerHTML = `
+            <label>
+                <input type="checkbox" value="${worker.person_id}">
+                ${worker.first_name} ${worker.last_name}
+            </label>
+        `;
+
+        list.appendChild(div);
+    });
+}
+
+document.getElementById("closeAddWorkersModal")
+    .addEventListener("click", closeAddWorkersModal);
+
+function closeAddWorkersModal() {
+    document.getElementById("addWorkersModal")
+        .classList.add("hidden-workers");
+}
+
+document.getElementById("confirmAddWorkersBtn")
+    .addEventListener("click", async () => {
+
+    const checked = document.querySelectorAll(
+        "#availableWorkersList input[type='checkbox']:checked"
+    );
+
+    if (checked.length === 0) {
+        alert("Select at least one worker");
+        return;
+    }
+
+    const workerIds = Array.from(checked).map(cb => cb.value);
+
+    try {
+        // 🔴 AJUSTA este endpoint según tu backend
+        const productionId = currentConsolidation.production_id;
+
+        for (const workerId of workerIds) {
+            await fetch(`${API_BASE}/worker-productions`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    productionId: productionId,
+                    workerId: workerId,
+                    bedsAssigned: 0,
+                    bonusApplied: false   
+                })
+            });
+        }
+
+        closeAddWorkersModal();
+
+        // recargar workers activos
+        await loadWorkersFromProduction(currentConsolidation.production_id);
+
+    } catch (error) {
+        console.error("Error adding workers:", error);
+        alert("Error adding workers");
+    }
+});
