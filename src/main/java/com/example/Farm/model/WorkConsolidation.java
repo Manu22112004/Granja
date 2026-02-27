@@ -81,12 +81,12 @@ public class WorkConsolidation {
     @JoinColumn(name = "pricing_policy_id", nullable = true, unique = true)
     private PricingPolicy pricingPolicy;
 
-    @OneToOne(optional = true)
-    @JoinColumn(name = "crew_leader_id", nullable = true, unique = true)
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "crew_leader_id", nullable = true)
     private CrewLeader crewLeader;
 
-    @OneToOne(optional = true)
-    @JoinColumn(name = "quality_checker_id", nullable = true, unique = true)
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "quality_checker_id", nullable = true)
     private QualityChecker qualityChecker;
 
 }
