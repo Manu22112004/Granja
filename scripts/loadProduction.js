@@ -1,8 +1,11 @@
-/*UTILITYS*/
-const API_BASE = "http://localhost:8082/api";
+import { API_BASE_URL } from "./config.js";
+
+/* =========================
+   UTILS
+========================= */
 
 async function fetchJson(endpoint) {
-    const response = await fetch(`${API_BASE}${endpoint}`);
+    const response = await fetch(`${API_BASE_URL}${endpoint}`);
     if (!response.ok) {
         throw new Error(`Error fetching ${endpoint}`);
     }
@@ -13,8 +16,10 @@ function formatDate(dateString) {
     return new Date(dateString).toLocaleDateString();
 }
 
+/* =========================
+   LOAD INFO
+========================= */
 
-/*LOAD INFO*/
 document.addEventListener("DOMContentLoaded", async () => {
     const params = new URLSearchParams(window.location.search);
     const workConsolidationId = params.get("production_id");
@@ -26,18 +31,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
         await loadProductionKpis(workConsolidationId);
-    } catch (error) {
-        console.error("Error loading KPIs:", error);
-        alert("Error loading production data");
-    }
-
-    try {
         await loadProductionMatrix(workConsolidationId);
     } catch (error) {
-        console.error("Error loading matrix:", error);
-        alert("Error loading production matrix");
+        console.error("Error loading production data:", error);
+        alert("Error loading production data");
     }
 });
+
+/* =========================
+   KPI
+========================= */
 
 async function loadProductionKpis(workConsolidationId) {
 
@@ -56,7 +59,6 @@ async function loadProductionKpis(workConsolidationId) {
             : null
     ]);
 
-    // 3️⃣ Pintar KPI
     document.getElementById("kpi-work-date").textContent =
         consolidation.work_date
             ? formatDate(consolidation.work_date)
@@ -71,8 +73,7 @@ async function loadProductionKpis(workConsolidationId) {
     document.getElementById("kpi-beds").textContent =
         consolidation.total_beds_produced ?? "—";
 
-    document.getElementById("kpi-bonuses").textContent =
-        "—"; // pendiente
+    document.getElementById("kpi-bonuses").textContent = "—";
 
     document.getElementById("kpi-pull").textContent =
         consolidation.pull_type ?? "—";
@@ -84,54 +85,51 @@ async function loadProductionKpis(workConsolidationId) {
         consolidation.max_time ?? "—";
 }
 
-/*LOAD TABLE*/
+/* =========================
+   TABLE
+========================= */
+
 async function loadProductionMatrix(workConsolidationId) {
-    try {
-        // 1️⃣ Obtener work consolidation
-        const consolidation = await fetchJson(
-            `/work-consolidations/${workConsolidationId}`
-        );
 
-        if (!consolidation.production_id) return;
+    const consolidation = await fetchJson(
+        `/work-consolidations/${workConsolidationId}`
+    );
 
-        // 2️⃣ Obtener production
-        const production = await fetchJson(
-            `/productions/${consolidation.production_id}`
-        );
+    if (!consolidation.production_id) return;
 
-        const workerProductionIds = production.workerProductions || [];
+    const production = await fetchJson(
+        `/productions/${consolidation.production_id}`
+    );
 
-        if (workerProductionIds.length === 0) {
-            document.getElementById("productionMatrixBody").innerHTML =
-                `<tr><td colspan="6">No workers assigned</td></tr>`;
-            return;
-        }
+    const workerProductionIds = production.workerProductions || [];
 
-        // 3️⃣ Obtener worker productions
-        const workerProductions = await Promise.all(
-            workerProductionIds.map(id =>
-                fetchJson(`/worker-productions/${id}`)
-            )
-        );
+    const tbody = document.getElementById("productionMatrixBody");
+    tbody.innerHTML = "";
 
-        // 4️⃣ Obtener workers
-        const rowsData = await Promise.all(
-            workerProductions.map(async wp => {
-                if (!wp.worker_id) return null;
-
-                const worker = await fetchJson(`/workers/${wp.worker_id}`);
-
-                return { worker, wp };
-            })
-        );
-
-        renderProductionMatrix(
-            rowsData.filter(item => item !== null)
-        );
-
-    } catch (error) {
-        console.error("Error loading production matrix:", error);
+    if (workerProductionIds.length === 0) {
+        tbody.innerHTML =
+            `<tr><td colspan="6">No workers assigned</td></tr>`;
+        return;
     }
+
+    const workerProductions = await Promise.all(
+        workerProductionIds.map(id =>
+            fetchJson(`/worker-productions/${id}`)
+        )
+    );
+
+    const rowsData = await Promise.all(
+        workerProductions.map(async wp => {
+            if (!wp.worker_id) return null;
+
+            const worker = await fetchJson(`/workers/${wp.worker_id}`);
+            return { worker, wp };
+        })
+    );
+
+    renderProductionMatrix(
+        rowsData.filter(Boolean)
+    );
 }
 
 function renderProductionMatrix(items) {

@@ -1,10 +1,12 @@
-document.addEventListener("DOMContentLoaded", () => {
+import { API_BASE_URL } from "./config.js";
 
-    const API_CONSOLIDATION = "http://localhost:8082/api/work-consolidations";
-    const API_COMPANIES = "http://localhost:8082/api/companies";
-    const API_CUSTOMERS = "http://localhost:8082/api/customers";
-    const API_CREW_LEADERS = "http://localhost:8082/api/crew-leaders";
-    const API_QUALITY_CHECKERS = "http://localhost:8082/api/quality-checkers";
+const API_CONSOLIDATION = `${API_BASE_URL}/work-consolidations`;
+const API_COMPANIES = `${API_BASE_URL}/companies`;
+const API_CUSTOMERS = `${API_BASE_URL}/customers`;
+const API_CREW_LEADERS = `${API_BASE_URL}/crew-leaders`;
+const API_QUALITY_CHECKERS = `${API_BASE_URL}/quality-checkers`;
+
+document.addEventListener("DOMContentLoaded", () => {
 
     const modal = document.getElementById("consolidationModal");
     const overlay = document.getElementById("modalOverlay");
@@ -16,12 +18,12 @@ document.addEventListener("DOMContentLoaded", () => {
         modal.classList.remove("hidden");
         overlay.classList.remove("hidden");
         loadSelectData();
-    }
+    };
 
     window.closeModal = function () {
         modal.classList.add("hidden");
         overlay.classList.add("hidden");
-    }
+    };
 
     /* =========================
        LOAD DROPDOWNS
@@ -32,115 +34,112 @@ document.addEventListener("DOMContentLoaded", () => {
         const customerSelect = document.getElementById("customerSelect");
         const crewLeaderSelect = document.getElementById("crewLeaderSelect");
         const qualityCheckerSelect = document.getElementById("qualityCheckerSelect");
-        
+
         companySelect.innerHTML = "";
         customerSelect.innerHTML = "";
         crewLeaderSelect.innerHTML = "";
         qualityCheckerSelect.innerHTML = "";
 
-        const [
-            companies,
-            customers,
-            crewLeaders,
-            qualityCheckers
-        ] = await Promise.all([
-            fetch(API_COMPANIES).then(r => r.json()),
-            fetch(API_CUSTOMERS).then(r => r.json()),
-            fetch(API_CREW_LEADERS).then(r => r.json()),
-            fetch(API_QUALITY_CHECKERS).then(r => r.json())
-        ]);
+        try {
+            const [
+                companies,
+                customers,
+                crewLeaders,
+                qualityCheckers
+            ] = await Promise.all([
+                fetch(API_COMPANIES).then(r => r.json()),
+                fetch(API_CUSTOMERS).then(r => r.json()),
+                fetch(API_CREW_LEADERS).then(r => r.json()),
+                fetch(API_QUALITY_CHECKERS).then(r => r.json())
+            ]);
 
-        companies.forEach(c => {
-            const option = document.createElement("option");
-            option.value = c.company_id;
-            option.textContent = c.name;
-            companySelect.appendChild(option);
-        });
+            companies.forEach(c => {
+                companySelect.appendChild(
+                    new Option(c.name, c.company_id)
+                );
+            });
 
-        customers.forEach(c => {
-            const option = document.createElement("option");
-            option.value = c.customer_id;
-            option.textContent = c.name;
-            customerSelect.appendChild(option);
-        });
+            customers.forEach(c => {
+                customerSelect.appendChild(
+                    new Option(c.name, c.customer_id)
+                );
+            });
 
-        crewLeaderSelect.appendChild(new Option("—", ""));
-        qualityCheckerSelect.appendChild(new Option("—", ""));
+            crewLeaderSelect.appendChild(new Option("—", ""));
+            qualityCheckerSelect.appendChild(new Option("—", ""));
 
-        crewLeaders.forEach(p => {
-            const option = document.createElement("option");
-            option.value = p.person_id;
-            option.textContent = `${p.first_name} ${p.last_name}`;
-            crewLeaderSelect.appendChild(option);
-        });
+            crewLeaders.forEach(p => {
+                crewLeaderSelect.appendChild(
+                    new Option(`${p.first_name} ${p.last_name}`, p.person_id)
+                );
+            });
 
-        qualityCheckers.forEach(p => {
-            const option = document.createElement("option");
-            option.value = p.person_id;
-            option.textContent = `${p.first_name} ${p.last_name}`;
-            qualityCheckerSelect.appendChild(option);
-        });
+            qualityCheckers.forEach(p => {
+                qualityCheckerSelect.appendChild(
+                    new Option(`${p.first_name} ${p.last_name}`, p.person_id)
+                );
+            });
+
+        } catch (error) {
+            console.error("Error loading select data:", error);
+        }
     }
 
     /* =========================
        SUBMIT FORM
     ========================= */
     document.getElementById("consolidationForm")
-    .addEventListener("submit", async (e) => {
+        .addEventListener("submit", async (e) => {
 
-        e.preventDefault();
+            e.preventDefault();
 
-        const today = new Date();
-        today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
-        const workDate = today.toISOString().split("T")[0];
+            const today = new Date();
+            today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+            const workDate = today.toISOString().split("T")[0];
 
-        const crewLeaderValue = document.getElementById("crewLeaderSelect").value;
-        const qualityCheckerValue = document.getElementById("qualityCheckerSelect").value;
+            const crewLeaderValue =
+                document.getElementById("crewLeaderSelect").value || null;
+            const qualityCheckerValue =
+                document.getElementById("qualityCheckerSelect").value || null;
 
-        const payload = {
-            workDate: workDate,
-            pullType: "Primera",
-            maxTime: Number(document.getElementById("maxTime").value),
-            totalHours: 0,
-            totalBedsPlanned: Number(document.getElementById("totalBedsPlanned").value),
-            totalBedsProduced: 0,
-            totalCost: 0,
-            companyId: document.getElementById("companySelect").value,
-            customerId: document.getElementById("customerSelect").value,
-            productionId: null,
-            productionMatrixId: null,
-            pricingPolicyId: null,
-            productionReportId: null,
-            crewLeaderId: crewLeaderValue || null,
-            qualityCheckerId: qualityCheckerValue || null
-        };
+            const payload = {
+                workDate,
+                pullType: "Primera",
+                maxTime: Number(document.getElementById("maxTime").value),
+                totalHours: 0,
+                totalBedsPlanned: Number(document.getElementById("totalBedsPlanned").value),
+                totalBedsProduced: 0,
+                totalCost: 0,
+                companyId: document.getElementById("companySelect").value,
+                customerId: document.getElementById("customerSelect").value,
+                productionId: null,
+                productionMatrixId: null,
+                pricingPolicyId: null,
+                productionReportId: null,
+                crewLeaderId: crewLeaderValue,
+                qualityCheckerId: qualityCheckerValue
+            };
 
-        try {
-            console.log("Fecha enviada:", workDate);
+            try {
+                const response = await fetch(API_CONSOLIDATION, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
 
-            const response = await fetch(API_CONSOLIDATION, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            });
+                const responseText = await response.text();
 
-            const responseText = await response.text();
+                if (!response.ok) {
+                    throw new Error(responseText);
+                }
 
-            console.log("STATUS:", response.status);
-            console.log("RESPONSE:", responseText);
+                closeModal();
+                if (typeof loadConsolidations === "function") {
+                    loadConsolidations();
+                }
 
-            if (!response.ok) {
-                throw new Error(responseText);
+            } catch (err) {
+                console.error("Error creating consolidation:", err);
             }
-
-            closeModal();
-            if (typeof loadConsolidations === "function") {
-                loadConsolidations();
-            }
-
-        } catch (err) {
-            console.error(err);
-        }
-    });
-
+        });
 });

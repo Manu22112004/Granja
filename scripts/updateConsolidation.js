@@ -1,9 +1,13 @@
+import { API_BASE_URL } from "./config.js";
+
+const WORK_CONSOLIDATIONS_URL = `${API_BASE_URL}/work-consolidations`;
+
 /* =========================
    MODAL
 ========================= */
 
 function setupModal() {
-    
+
     const modal = document.getElementById("modalConsolidation");
     const openBtn = document.getElementById("editConsolidationBtn");
     const closeBtn = document.getElementById("closeModalConsolidation");
@@ -12,23 +16,19 @@ function setupModal() {
     openBtn.addEventListener("click", async () => {
         if (!currentConsolidation) return;
 
-        // 1️⃣ Cargar opciones primero
         await loadSelectOptions();
 
-        // 2️⃣ Llenar inputs normales
         document.getElementById("edit_work_date").value =
             currentConsolidation.work_date?.split("T")[0];
 
         document.getElementById("edit_total_beds_produced").value =
             currentConsolidation.total_beds_produced;
 
-        // 3️⃣ Seleccionar valores actuales correctamente
         setSelectValue("edit_company_id", currentConsolidation.company_id);
         setSelectValue("edit_customer_id", currentConsolidation.customer_id);
         setSelectValue("edit_crew_leader_id", currentConsolidation.crew_leader_id);
         setSelectValue("edit_quality_checker_id", currentConsolidation.quality_checker_id);
 
-        // 4️⃣ Mostrar modal
         modal.style.display = "flex";
     });
 
@@ -40,11 +40,8 @@ function setupModal() {
 
         if (!currentConsolidation) return;
 
-        // 🔥 PAYLOAD EN camelCase (lo que espera el backend)
         const updatedData = {
             workConsolidationId: currentConsolidation.work_consolidation_id,
-
-            // Editables
             workDate: document.getElementById("edit_work_date").value,
             totalBedsProduced: Number(
                 document.getElementById("edit_total_beds_produced").value
@@ -54,7 +51,6 @@ function setupModal() {
             crewLeaderId: getSafeValue("edit_crew_leader_id"),
             qualityCheckerId: getSafeValue("edit_quality_checker_id"),
 
-            // 🔒 No editables pero obligatorios para el backend
             pullType: currentConsolidation.pull_type,
             maxTime: currentConsolidation.max_time,
             totalHours: currentConsolidation.total_hours,
@@ -63,13 +59,10 @@ function setupModal() {
         };
 
         try {
-
             const payload = cleanPayload(updatedData);
 
-            console.log("JSON enviado:", payload);
-
             const response = await fetch(
-                `${API_URL}/${currentConsolidation.work_consolidation_id}`,
+                `${WORK_CONSOLIDATIONS_URL}/${currentConsolidation.work_consolidation_id}`,
                 {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
@@ -83,9 +76,7 @@ function setupModal() {
                 throw new Error("Update failed");
             }
 
-            // 🔥 IMPORTANTE: recargar desde backend para evitar datos inconsistentes
             await loadConsolidationDetail();
-
             modal.style.display = "none";
 
         } catch (error) {
@@ -95,15 +86,11 @@ function setupModal() {
     });
 
     modal.addEventListener("click", (e) => {
-        if (e.target === modal) {
-            modal.style.display = "none";
-        }
+        if (e.target === modal) modal.style.display = "none";
     });
 
     document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-            modal.style.display = "none";
-        }
+        if (e.key === "Escape") modal.style.display = "none";
     });
 }
 

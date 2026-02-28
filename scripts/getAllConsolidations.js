@@ -1,14 +1,22 @@
-const API_URL = "http://localhost:8082/api/work-consolidations";
-const API_URL_CUSTOMERS = "http://localhost:8082/api/customers";
+import { API_BASE_URL } from "./config.js";
+
+const API_CONSOLIDATIONS = `${API_BASE_URL}/work-consolidations`;
+const API_CUSTOMERS = `${API_BASE_URL}/customers`;
 
 document.addEventListener("DOMContentLoaded", loadConsolidations);
 
 async function loadConsolidations() {
     try {
-        const response = await fetch(API_URL);
-        const consolidations = await response.json();
+        const [consolidationsResponse, customersResponse] = await Promise.all([
+            fetch(API_CONSOLIDATIONS),
+            fetch(API_CUSTOMERS)
+        ]);
 
-        const customersResponse = await fetch(API_URL_CUSTOMERS);
+        if (!consolidationsResponse.ok || !customersResponse.ok) {
+            throw new Error("Failed to load data");
+        }
+
+        const consolidations = await consolidationsResponse.json();
         const customers = await customersResponse.json();
 
         const container = document.getElementById("consolidationsContainer");
@@ -29,9 +37,11 @@ function createConsolidationCard(c, customers) {
     div.className = "kpi-card consolidation-card";
     div.style.cursor = "pointer";
 
-    const customer = customers.find(cu => cu.customer_id === c.customer_id);
+    const customer = customers.find(
+        cu => cu.customer_id === c.customer_id
+    );
+
     const customerName = customer ? customer.name : "Unknown";
-    
 
     div.innerHTML = `
         <span class="kpi-label">${customerName}</span>
@@ -40,9 +50,10 @@ function createConsolidationCard(c, customers) {
         <span class="kpi-value">Hours: ${c.total_hours}</span>
         <span class="kpi-value">Cost: $${c.total_cost}</span>
     `;
-    
+
     div.addEventListener("click", () => {
-        window.location.href = `consolidationDetails.html?id=${c.work_consolidation_id}`;
+        window.location.href =
+            `consolidationDetails.html?id=${c.work_consolidation_id}`;
     });
 
     return div;

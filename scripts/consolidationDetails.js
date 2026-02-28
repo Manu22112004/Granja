@@ -1,16 +1,12 @@
-let currentConsolidation = null;
+import { API_BASE_URL } from "./config.js";
 
+let currentConsolidation = null;
 let currentWorkers = [];
 let allWorkersCache = [];
 let work_consolidation_id = null;
 
-
-import { API_BASE_URL } from "./config.js";
-
-fetch(`${API_BASE_URL}/api/work-consolidations`);
-
-const API_BASE = "http://localhost:8082/api";
-const API_URL = `${API_BASE}/work-consolidations`;
+// Endpoints base
+const WORK_CONSOLIDATIONS_URL = `${API_BASE_URL}/work-consolidations`;
 
 /* =========================
    INIT
@@ -32,8 +28,7 @@ async function loadConsolidationDetail() {
     work_consolidation_id = id;
 
     try {
-        const response = await fetch(`${API_URL}/${id}`);
-        if (!response.ok) throw new Error("Failed to load consolidation");
+        const response = await fetch(`${WORK_CONSOLIDATIONS_URL}/${id}`);        if (!response.ok) throw new Error("Failed to load consolidation");
 
         currentConsolidation = await response.json();
 
@@ -97,8 +92,10 @@ function formatDate(dateString) {
 }
 
 async function fetchJson(endpoint) {
-    const response = await fetch(`${API_BASE}${endpoint}`);
-    if (!response.ok) throw new Error(`Error fetching ${endpoint}`);
+    const response = await fetch(`${API_BASE_URL}${endpoint}`);
+    if (!response.ok) {
+        throw new Error(`Error fetching ${endpoint}`);
+    }
     return response.json();
 }
 
@@ -240,14 +237,14 @@ document.getElementById("confirmAddWorkersBtn")
         const productionId = currentConsolidation.production_id;
 
         for (const workerId of workerIds) {
-            await fetch(`${API_BASE}/worker-productions`, {
+            await fetch(`${API_BASE_URL}/worker-productions`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     productionId: productionId,
                     workerId: workerId,
                     bedsAssigned: 0,
-                    bonusApplied: false   
+                    bonusApplied: false
                 })
             });
         }
