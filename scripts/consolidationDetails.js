@@ -2,6 +2,7 @@ let currentConsolidation = null;
 
 let currentWorkers = [];
 let allWorkersCache = [];
+let work_consolidation_id = null;
 
 const API_BASE = "http://localhost:8082/api";
 const API_URL = `${API_BASE}/work-consolidations`;
@@ -23,6 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function loadConsolidationDetail() {
     const id = new URLSearchParams(window.location.search).get("id");
     if (!id) return;
+    work_consolidation_id = id;
 
     try {
         const response = await fetch(`${API_URL}/${id}`);
@@ -255,3 +257,17 @@ document.getElementById("confirmAddWorkersBtn")
         alert("Error adding workers");
     }
 });
+
+const goToProductionBtn = document.getElementById("goToProductionBtn");
+
+if (goToProductionBtn) {
+    goToProductionBtn.addEventListener("click", () => {
+        if (!work_consolidation_id) {
+            alert("Work consolidation ID not found");
+            return;
+        }
+
+        // Redirige enviando el ID como production_id
+        window.location.href = `production.html?production_id=${work_consolidation_id}`;
+    });
+}

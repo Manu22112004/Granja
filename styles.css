@@ -964,3 +964,33 @@ body {
 .hidden-workers {
     display: none;
 }
+
+/* =========================
+   FROM CONSOLIDATION TO PRODUCTION
+========================= */
+
+.page-actions-consolidation-production {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* Botón Production */
+.btn-consolidation-production {
+    background-color: #0b3a5a; /* azul oscuro */
+    color: #ffffff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-consolidation-production:hover {
+    background-color: #09405f;
+}
+
+.btn-consolidation-production:active {
+    transform: scale(0.97);
+}
