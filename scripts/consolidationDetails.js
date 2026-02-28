@@ -4,6 +4,11 @@ let currentWorkers = [];
 let allWorkersCache = [];
 let work_consolidation_id = null;
 
+
+import { API_BASE_URL } from "./config.js";
+
+fetch(`${API_BASE_URL}/api/work-consolidations`);
+
 const API_BASE = "http://localhost:8082/api";
 const API_URL = `${API_BASE}/work-consolidations`;
 
