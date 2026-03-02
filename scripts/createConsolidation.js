@@ -114,7 +114,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 customerId: document.getElementById("customerSelect").value,
                 productionId: null,
                 productionMatrixId: null,
-                pricingPolicyId: null,
                 productionReportId: null,
                 crewLeaderId: crewLeaderValue,
                 qualityCheckerId: qualityCheckerValue

@@ -6,7 +6,7 @@ const WORK_CONSOLIDATIONS_URL = `${API_BASE_URL}/work-consolidations`;
    MODAL
 ========================= */
 
-function setupModal() {
+window.setupModal = function() {
 
     const modal = document.getElementById("modalConsolidation");
     const openBtn = document.getElementById("editConsolidationBtn");
@@ -14,20 +14,20 @@ function setupModal() {
     const saveBtn = modal.querySelector(".save-btn");
 
     openBtn.addEventListener("click", async () => {
-        if (!currentConsolidation) return;
-
+        if (!window.currentConsolidation) return;
+        
         await loadSelectOptions();
 
         document.getElementById("edit_work_date").value =
-            currentConsolidation.work_date?.split("T")[0];
+            window.currentConsolidation.work_date?.split("T")[0];
 
         document.getElementById("edit_total_beds_produced").value =
-            currentConsolidation.total_beds_produced;
+            window.currentConsolidation.total_beds_produced;
 
-        setSelectValue("edit_company_id", currentConsolidation.company_id);
-        setSelectValue("edit_customer_id", currentConsolidation.customer_id);
-        setSelectValue("edit_crew_leader_id", currentConsolidation.crew_leader_id);
-        setSelectValue("edit_quality_checker_id", currentConsolidation.quality_checker_id);
+        setSelectValue("edit_company_id", window.currentConsolidation.company_id);
+        setSelectValue("edit_customer_id", window.currentConsolidation.customer_id);
+        setSelectValue("edit_crew_leader_id", window.currentConsolidation.crew_leader_id);
+        setSelectValue("edit_quality_checker_id", window.currentConsolidation.quality_checker_id);
 
         modal.style.display = "flex";
     });
@@ -38,11 +38,12 @@ function setupModal() {
 
     saveBtn.addEventListener("click", async () => {
 
-        if (!currentConsolidation) return;
+        if (!window.currentConsolidation) return;
 
         const updatedData = {
-            workConsolidationId: currentConsolidation.work_consolidation_id,
+            workConsolidationId: window.currentConsolidation.work_consolidation_id,
             workDate: document.getElementById("edit_work_date").value,
+            
             totalBedsProduced: Number(
                 document.getElementById("edit_total_beds_produced").value
             ),
@@ -51,18 +52,18 @@ function setupModal() {
             crewLeaderId: getSafeValue("edit_crew_leader_id"),
             qualityCheckerId: getSafeValue("edit_quality_checker_id"),
 
-            pullType: currentConsolidation.pull_type,
-            maxTime: currentConsolidation.max_time,
-            totalHours: currentConsolidation.total_hours,
-            totalBedsPlanned: currentConsolidation.total_beds_planned,
-            totalCost: currentConsolidation.total_cost
+            pullType: window.currentConsolidation.pull_type,
+            maxTime: window.currentConsolidation.max_time,
+            totalHours: window.currentConsolidation.total_hours,
+            totalBedsPlanned: window.currentConsolidation.total_beds_planned,
+            totalCost: window.currentConsolidation.total_cost
         };
 
         try {
             const payload = cleanPayload(updatedData);
 
             const response = await fetch(
-                `${WORK_CONSOLIDATIONS_URL}/${currentConsolidation.work_consolidation_id}`,
+                `${WORK_CONSOLIDATIONS_URL}/${window.currentConsolidation.work_consolidation_id}`,
                 {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
@@ -164,4 +165,12 @@ function cleanPayload(obj) {
     return Object.fromEntries(
         Object.entries(obj).filter(([_, value]) => value !== null)
     );
+}
+
+async function fetchJson(endpoint) {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`);
+    if (!response.ok) {
+        throw new Error(`Error fetching ${endpoint}`);
+    }
+    return response.json();
 }

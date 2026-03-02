@@ -134,6 +134,10 @@
                 Production
             </button>
 
+            <button id="pricingBtn" class="btn-consolidation-production-pricing-modal">
+                Pricing
+            </button>
+
             <button id="editConsolidationBtn" class="edit-btn">
                 Edit
             </button>
@@ -269,10 +273,31 @@
     </div>
 </div>
 
+<!-- PRICING POLICY MODAL -->
+<div id="pricingModal" class="modal-consolidation">
+    <div class="modal-consolidation-content">
+        <span id="closePricingModal" class="close-btn">&times;</span>
+        <h2>Pricing Policy</h2>
+
+        <form id="pricingForm">
+
+            <label>Price per Bed</label>
+            <input type="number" id="pricing_price_per_bed" min="0" step="0.01">
+
+            <label>Price per Hour</label>
+            <input type="number" id="pricing_price_per_hour" min="0" step="0.01">
+
+            <button type="button" id="savePricingBtn" class="save-btn">
+                Save Pricing
+            </button>
+        </form>
+    </div>
+</div>
 
 <script type="module" src="scripts/sidebar.js"></script>
 <script type="module" src="scripts/consolidationDetails.js"></script>
 <script type="module" src="scripts/updateConsolidation.js"></script>
+<script type="module" src="scripts/pricingPolicyModal.js"></script>
 
 </body>
 </html>

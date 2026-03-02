@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
    LOAD CONSOLIDATION
 ========================= */
 
-async function loadConsolidationDetail() {
+window.loadConsolidationDetail = async function () {
     const id = new URLSearchParams(window.location.search).get("id");
     if (!id) return;
     work_consolidation_id = id;
@@ -31,6 +31,7 @@ async function loadConsolidationDetail() {
         const response = await fetch(`${WORK_CONSOLIDATIONS_URL}/${id}`);        if (!response.ok) throw new Error("Failed to load consolidation");
 
         currentConsolidation = await response.json();
+        window.currentConsolidation = currentConsolidation;
 
         // Helper: fetch solo si hay id, si no devuelve null
         const safeFetch = (url, id) => id ? fetchJson(`${url}/${id}`) : Promise.resolve(null);
@@ -181,10 +182,10 @@ async function openAddWorkersModal() {
         allWorkersCache = await fetchJson("/workers");
     }
 
-    const activeIds = new Set(currentWorkers.map(w => w.id));
+    const activeIds = new Set(currentWorkers.map(w => w.person_id));
 
     const availableWorkers = allWorkersCache.filter(
-        w => !activeIds.has(w.id)
+        w => !activeIds.has(w.person_id)
     );
 
     if (availableWorkers.length === 0) {

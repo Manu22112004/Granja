@@ -3,7 +3,8 @@ import { API_BASE_URL } from "./config.js";
 const API_CONSOLIDATIONS = `${API_BASE_URL}/work-consolidations`;
 const API_CUSTOMERS = `${API_BASE_URL}/customers`;
 
-document.addEventListener("DOMContentLoaded", loadConsolidations);
+window.loadConsolidations = loadConsolidations;
+document.addEventListener("DOMContentLoaded", window.loadConsolidations);
 
 async function loadConsolidations() {
     try {
