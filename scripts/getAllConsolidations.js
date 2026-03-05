@@ -1,11 +1,17 @@
 import { API_BASE_URL } from "./config.js";
 
+/*=============
+    INIT VAR
+=============*/
 const API_CONSOLIDATIONS = `${API_BASE_URL}/work-consolidations`;
 const API_CUSTOMERS = `${API_BASE_URL}/customers`;
 
 window.loadConsolidations = loadConsolidations;
 document.addEventListener("DOMContentLoaded", window.loadConsolidations);
 
+/*=============================
+    LOAD CONSOLIDATIONS KPIS
+=============================*/
 async function loadConsolidations() {
     try {
         const [consolidationsResponse, customersResponse] = await Promise.all([
@@ -33,6 +39,9 @@ async function loadConsolidations() {
     }
 }
 
+/*===============================
+    LOAD CONSOLIDATION IN KPIS
+===============================*/
 function createConsolidationCard(c, customers) {
     const div = document.createElement("div");
     div.className = "kpi-card consolidation-card";
@@ -49,7 +58,6 @@ function createConsolidationCard(c, customers) {
         <span class="kpi-value">Fecha: ${formatDate(c.work_date)}</span>
         <span class="kpi-value">Beds: ${c.total_beds_produced}/${c.total_beds_planned}</span>
         <span class="kpi-value">Hours: ${c.total_hours}</span>
-        <span class="kpi-value">Cost: $${c.total_cost}</span>
     `;
 
     div.addEventListener("click", () => {
@@ -60,6 +68,7 @@ function createConsolidationCard(c, customers) {
     return div;
 }
 
+//FUNCTION FOR TIMEZONE
 function formatDate(dateString) {
     return new Date(dateString).toLocaleDateString();
 }

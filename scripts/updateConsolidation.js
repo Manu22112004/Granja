@@ -1,11 +1,13 @@
 import { API_BASE_URL } from "./config.js";
 
+/*=======================
+    INIT CONSOLIDATION
+=======================*/
 const WORK_CONSOLIDATIONS_URL = `${API_BASE_URL}/work-consolidations`;
 
-/* =========================
-   MODAL
-========================= */
-
+/* =======================================
+   UPDATE CONSOLIDATION MODAL FUNCTIONS
+========================================*/
 window.setupModal = function() {
 
     const modal = document.getElementById("modalConsolidation");
@@ -13,6 +15,7 @@ window.setupModal = function() {
     const closeBtn = document.getElementById("closeModalConsolidation");
     const saveBtn = modal.querySelector(".save-btn");
 
+    //OPEN MODAL AND LOAD CURRENT CONSOLIDATION DATA
     openBtn.addEventListener("click", async () => {
         if (!window.currentConsolidation) return;
         
@@ -32,10 +35,12 @@ window.setupModal = function() {
         modal.style.display = "flex";
     });
 
+    //CLOSE MODAL
     closeBtn.addEventListener("click", () => {
         modal.style.display = "none";
     });
 
+    //SAVE UPDATED CONSOLIDATION
     saveBtn.addEventListener("click", async () => {
 
         if (!window.currentConsolidation) return;
@@ -59,6 +64,7 @@ window.setupModal = function() {
             totalCost: window.currentConsolidation.total_cost
         };
 
+        //TRY PUT REQUEST TO UPDATE CONSOLIDATION
         try {
             const payload = cleanPayload(updatedData);
 

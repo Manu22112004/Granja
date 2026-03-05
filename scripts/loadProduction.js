@@ -1,9 +1,10 @@
 import { API_BASE_URL } from "./config.js";
 
-/* =========================
-   UTILS
-========================= */
+let productionMatrixData = [];
 
+/*=========
+   UTILS
+=========*/
 async function fetchJson(endpoint) {
     const response = await fetch(`${API_BASE_URL}${endpoint}`);
     if (!response.ok) {
@@ -16,10 +17,25 @@ function formatDate(dateString) {
     return new Date(dateString).toLocaleDateString();
 }
 
-/* =========================
-   LOAD INFO
-========================= */
+async function patchJson(endpoint, body) {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+    });
 
+    if (!response.ok) {
+        throw new Error(`Error patching ${endpoint}`);
+    }
+
+    return response.json();
+}
+
+/*=============
+   INIT PAGE
+=============*/
 document.addEventListener("DOMContentLoaded", async () => {
     const params = new URLSearchParams(window.location.search);
     const workConsolidationId = params.get("production_id");
@@ -38,18 +54,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
-/* =========================
-   KPI
-========================= */
+/*===========================
+   LOAD KPI FOR PRODUCTION
+===========================*/
 
 async function loadProductionKpis(workConsolidationId) {
 
-    // 1️⃣ Obtener work consolidation
     const consolidation = await fetchJson(
         `/work-consolidations/${workConsolidationId}`
     );
 
-    // 2️⃣ Cargar company y customer en paralelo
     const [company, customer] = await Promise.all([
         consolidation.company_id
             ? fetchJson(`/companies/${consolidation.company_id}`)
@@ -85,10 +99,9 @@ async function loadProductionKpis(workConsolidationId) {
         consolidation.max_time ?? "—";
 }
 
-/* =========================
-   TABLE
-========================= */
-
+/*========================
+   LOAD PRODUCTION DATA
+========================*/
 async function loadProductionMatrix(workConsolidationId) {
 
     const consolidation = await fetchJson(
@@ -100,6 +113,8 @@ async function loadProductionMatrix(workConsolidationId) {
     const production = await fetchJson(
         `/productions/${consolidation.production_id}`
     );
+
+    if(!production.production_id) return;
 
     const workerProductionIds = production.workerProductions || [];
 
@@ -132,10 +147,14 @@ async function loadProductionMatrix(workConsolidationId) {
     );
 }
 
+/*=================================
+    LOAD TABLE PRODUCTION MATRIX
+=================================*/
 function renderProductionMatrix(items) {
     const tbody = document.getElementById("productionMatrixBody");
     tbody.innerHTML = "";
 
+    productionMatrixData = items;
     items.forEach(({ worker, wp }) => {
         const tr = document.createElement("tr");
 
@@ -143,8 +162,16 @@ function renderProductionMatrix(items) {
             <td>${worker.first_name} ${worker.last_name}</td>
             <td>${worker.employee_number ?? "—"}</td>
             <td>${wp.beds_assigned ?? 0}</td>
-            <td>—</td>
-            <td>—</td>
+            <td>
+                <input 
+                    type="number" 
+                    class="bonus-input"
+                    value="0"
+                    step="0.5"
+                    data-worker-production-id="${wp.worker_production_id}"
+                >
+            </td>
+            <td class="total-beds">0</td>
             <td>
                 <span class="${worker.active ? "status-active" : "status-inactive"}">
                     ${worker.active ? "Active" : "Inactive"}
@@ -154,4 +181,120 @@ function renderProductionMatrix(items) {
 
         tbody.appendChild(tr);
     });
+    const bonusInputs = document.querySelectorAll(".bonus-input");
+
+    bonusInputs.forEach(input => {
+        input.addEventListener("input", () => {
+            const row = input.closest("tr");
+
+            const bedsAssigned = parseFloat(
+                row.children[2].textContent
+            ) || 0;
+
+            const bonus = parseFloat(input.value) || 0;
+
+            const totalCell = row.querySelector(".total-beds");
+
+            totalCell.textContent = bedsAssigned + bonus;
+        });
+    });
+}
+
+/*=================================================
+    UPDATE BEDS AND NUM FOR WORKER IN PRODUCTION
+=================================================*/
+const editBtn = document.getElementById("editProductionBtn");
+const modal = document.getElementById("editProductionModal");
+const container = document.getElementById("editWorkersContainer");
+const startingInput = document.getElementById("startingNumberInput");
+
+editBtn.addEventListener("click", () => {
+    openEditModal();
+});
+
+document.getElementById("cancelEditProduction")
+    .addEventListener("click", () => {
+        modal.style.display = "none";
+    });
+
+document.getElementById("saveEditProduction")
+    .addEventListener("click", () => {
+        applyChangesFromModal();
+        modal.style.display = "none";
+    });
+
+
+function openEditModal() {
+
+    container.innerHTML = `
+        <div style="margin-bottom:16px;">
+            <label>New Beds Assigned (for ALL workers)</label>
+            <input type="number" id="globalBedsInput" />
+        </div>
+    `;
+
+    modal.style.display = "flex";
+}
+//SAVE CHANGES
+async function applyChangesFromModal() {
+
+    const newStartingNumber = parseInt(startingInput.value);
+    const newBedsAssigned = parseFloat(
+        document.getElementById("globalBedsInput")?.value
+    );
+
+    try {
+
+        for (let i = 0; i < productionMatrixData.length; i++) {
+
+            const item = productionMatrixData[i];
+
+            // ===============================
+            // UPDATE BEDS_ASSIGNED (ALL WORKERS)
+            // ===============================
+            if (!isNaN(newBedsAssigned)) {
+
+                await patchJson(
+                    `/worker-productions/${item.wp.worker_production_id}`,
+                    {
+                        bedsAssigned: newBedsAssigned,
+                        bonusApplied: item.wp.bonus_applied ?? false,
+                        workerId: item.worker.person_id,   // ✅ CORRECTO
+                        productionId: item.wp.production_id
+                    }
+                );
+            }
+
+            // ===============================
+            // UPDATE EMPLOYEE NUMBER (SEQUENCE)
+            // ===============================
+            if (!isNaN(newStartingNumber)) {
+
+                await patchJson(
+                    `/workers/${item.worker.person_id}`,
+                    {
+                        firstName: item.worker.first_name,
+                        lastName: item.worker.last_name,
+                        active: item.worker.active,
+                        employeeNumber: String(newStartingNumber + i), // 👈 importante string
+                        skillLevel: item.worker.skill_level,
+                        hourlyRate: item.worker.hourly_rate
+                    }
+                );
+            }
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const workConsolidationId = params.get("production_id");
+
+        await loadProductionMatrix(workConsolidationId);
+
+        modal.style.display = "none";
+
+        console.log("Production updated successfully");
+
+    } catch (error) {
+        console.error("Error updating production:", error);
+        alert("Error updating production");
+    }
 }

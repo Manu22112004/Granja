@@ -1033,3 +1033,24 @@ body {
     cursor: not-allowed;
     opacity: 0.8;
 }
+
+/*
+    PRODUCTION MATRIX
+*/
+
+.modal-overlay-matrix-update {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal-content-matrix-update {
+    background: white;
+    padding: 24px;
+    width: 500px;
+    border-radius: 8px;
+}

@@ -1,33 +1,35 @@
 import { API_BASE_URL } from "./config.js";
 
+/*=============
+    INIT VAR
+=============*/
 const API_CONSOLIDATION = `${API_BASE_URL}/work-consolidations`;
 const API_COMPANIES = `${API_BASE_URL}/companies`;
 const API_CUSTOMERS = `${API_BASE_URL}/customers`;
 const API_CREW_LEADERS = `${API_BASE_URL}/crew-leaders`;
 const API_QUALITY_CHECKERS = `${API_BASE_URL}/quality-checkers`;
 
+/*========================
+    CONSOLIDATION MODAL
+========================*/
 document.addEventListener("DOMContentLoaded", () => {
-
     const modal = document.getElementById("consolidationModal");
     const overlay = document.getElementById("modalOverlay");
 
-    /* =========================
-       OPEN / CLOSE MODAL
-    ========================= */
+    //OPEN MODAL
     window.openModal = function () {
         modal.classList.remove("hidden");
         overlay.classList.remove("hidden");
         loadSelectData();
     };
 
+    //CLOSE MODAL
     window.closeModal = function () {
         modal.classList.add("hidden");
         overlay.classList.add("hidden");
     };
 
-    /* =========================
-       LOAD DROPDOWNS
-    ========================= */
+    //LOAD DEFAULT DATA
     async function loadSelectData() {
 
         const companySelect = document.getElementById("companySelect");
@@ -85,9 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    /* =========================
-       SUBMIT FORM
-    ========================= */
+    //SUBMIT DATA
     document.getElementById("consolidationForm")
         .addEventListener("submit", async (e) => {
 
@@ -140,5 +140,5 @@ document.addEventListener("DOMContentLoaded", () => {
             } catch (err) {
                 console.error("Error creating consolidation:", err);
             }
-        });
+    });
 });

@@ -1,15 +1,17 @@
 import { API_BASE_URL } from "./config.js";
 
+/*=============
+    INIT VAR
+=============*/
 let currentConsolidation = null;
 let currentWorkers = [];
 let allWorkersCache = [];
 let work_consolidation_id = null;
 
-// Endpoints base
 const WORK_CONSOLIDATIONS_URL = `${API_BASE_URL}/work-consolidations`;
 
 /* =========================
-   INIT
+   INIT FUNCTIONS
 ========================= */
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -67,6 +69,9 @@ window.loadConsolidationDetail = async function () {
     }
 }
 
+/*==============
+    KPIS DATA
+==============*/
 function renderKpis(company, customer, crewLeader, qualityChecker, pricingPolicy) {
     document.getElementById("companyName").textContent = company.name;
     document.getElementById("customerName").textContent = customer.name;
@@ -76,21 +81,23 @@ function renderKpis(company, customer, crewLeader, qualityChecker, pricingPolicy
         `${qualityChecker.first_name} ${qualityChecker.last_name}`;
 
     document.getElementById("bedsProduced").textContent =
-        currentConsolidation.total_beds_produced;
+        `${currentConsolidation.total_beds_produced} / ${currentConsolidation.total_beds_planned}`;
 
     document.getElementById("startDate").textContent =
         formatDate(currentConsolidation.work_date);
 
     document.getElementById("priceHour").textContent =
-    pricingPolicy ? `$${pricingPolicy.price_per_hour}` : "—";
+        pricingPolicy ? `$${pricingPolicy.price_per_hour}` : "—";
 
     document.getElementById("priceBed").textContent =
-    pricingPolicy ? `$${pricingPolicy.price_per_bed}` : "—";
+        pricingPolicy ? `$${pricingPolicy.price_per_bed}` : "—";
 }
 
+//FUNCION FOR DATE CHANGE
 function formatDate(dateString) {
     return new Date(dateString).toLocaleDateString();
 }
+
 
 async function fetchJson(endpoint) {
     const response = await fetch(`${API_BASE_URL}${endpoint}`);
@@ -113,7 +120,6 @@ function enableKpiSelection() {
 /* =========================
    LOAD WORKERS
 ========================= */
-
 async function loadWorkersFromProduction(productionId) {
     try {
         const production = await fetchJson(`/productions/${productionId}`);
@@ -142,6 +148,9 @@ async function loadWorkersFromProduction(productionId) {
     }
 }
 
+/*=======================
+    LOAD WORKERS TABLE
+=======================*/
 function renderWorkers(workers) {
     currentWorkers = workers;
     const tbody = document.getElementById("workersTableBody");
@@ -165,8 +174,9 @@ function renderWorkers(workers) {
         `👷 ${workers.length} Workers Active`;
 }
 
-//Tabla workers
-
+/*==========================
+    MODAL FOR ADD WORKERS
+==========================*/
 document.getElementById("addWorkerBtn").addEventListener("click", async () => {
     await openAddWorkersModal();
 });
@@ -232,9 +242,7 @@ document.getElementById("confirmAddWorkersBtn")
 
     const workerIds = Array.from(checked).map(cb => cb.value);
 
-    //sds
     try {
-        // 🔴 AJUSTA este endpoint según tu backend
         const productionId = currentConsolidation.production_id;
 
         for (const workerId of workerIds) {
@@ -252,7 +260,6 @@ document.getElementById("confirmAddWorkersBtn")
 
         closeAddWorkersModal();
 
-        // recargar workers activos
         await loadWorkersFromProduction(currentConsolidation.production_id);
 
     } catch (error) {
@@ -261,6 +268,9 @@ document.getElementById("confirmAddWorkersBtn")
     }
 });
 
+/*=========================
+    BUTTON TO PRODUCTION
+=========================*/
 const goToProductionBtn = document.getElementById("goToProductionBtn");
 
 if (goToProductionBtn) {
@@ -269,8 +279,6 @@ if (goToProductionBtn) {
             alert("Work consolidation ID not found");
             return;
         }
-
-        // Redirige enviando el ID como production_id
         window.location.href = `production.html?production_id=${work_consolidation_id}`;
     });
 }

@@ -1,16 +1,25 @@
 import { API_BASE_URL } from "./config.js";
 
+/*=============
+    INIT VAR
+=============*/
 const PRICING_POLICIES_URL = `${API_BASE_URL}/pricing-policies`;
 
+/*==============
+    LOAD PAGE
+==============*/
 document.addEventListener("DOMContentLoaded", () => {
 
+    //DEFINE FUNCTIONS FOR BUTTONS
     const pricingBtn = document.getElementById("pricingBtn");
     const modal = document.getElementById("pricingModal");
     const closeBtn = document.getElementById("closePricingModal");
     const saveBtn = document.getElementById("savePricingBtn");
 
+    //INIT VAR TO HOLD CURRENT PRICING POLICY
     let currentPricingPolicy = null;
 
+    //OPEN MODAL AND LOAD CURRENT PRICING POLICY
     pricingBtn.addEventListener("click", async () => {
         if (!window.currentConsolidation) return;
 
@@ -20,10 +29,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const res = await fetch(`${PRICING_POLICIES_URL}/${pricingPolicyId}`);
         if (!res.ok) return;
 
-        // ✅ LEER SOLO UNA VEZ
         const raw = await res.json();
 
-        // ✅ Normalizar snake_case → camelCase
         currentPricingPolicy = {
             pricingPolicyId: raw.pricing_policy_id,
             pricePerHour: raw.price_per_hour,
@@ -44,10 +51,12 @@ document.addEventListener("DOMContentLoaded", () => {
         modal.style.display = "flex";
     });
 
+    //CLOSE MODAL
     closeBtn.addEventListener("click", () => {
         modal.style.display = "none";
     });
 
+    //SAVE PRICING POLICY
     saveBtn.addEventListener("click", async () => {
         if (!currentPricingPolicy) {
             alert("Pricing policy not loaded");
@@ -63,7 +72,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     document.getElementById("pricing_price_per_hour").value
                 ),
 
-                // 🔴 obligatorios por @NotNull
                 effectiveFrom: currentPricingPolicy.effectiveFrom,
                 active: currentPricingPolicy.active,
 

@@ -1,6 +1,9 @@
-// js/config.js
+/*================
+    URL GLOBAL
+================*/
 export const API_BASE_URL = "http://localhost:8080/api";
 
+//PROTOTIPE
 export async function fetchJson(endpoint) {
     const response = await fetch(`${API_BASE_URL}${endpoint}`);
     if (!response.ok) {
