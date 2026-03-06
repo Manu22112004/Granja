@@ -59,7 +59,7 @@
                 <span>Production</span>
             </a> -->
 
-            <a href="reports.html" class="sidebar-link active">
+            <!-- <a href="reports.html" class="sidebar-link active">
                 <div class="icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -70,7 +70,7 @@
                     </svg>
                 </div>
                 <span>Reports</span>
-            </a>
+            </a> -->
 
             <a href="configuration.html" class="sidebar-link">
                 <div class="icon">
@@ -128,38 +128,44 @@
         <section class="dashboard-kpis">
 
             <div class="kpi-card">
-                <span class="kpi-label">Date</span>
-                <span class="kpi-value">01/17/2026</span>
-            </div>
-
-            <div class="kpi-card">
-                <span class="kpi-label">Pull</span>
-                <span class="kpi-value">1st</span>
+                <span class="kpi-label">Company</span>
+                <span class="kpi-value" id="kpi-company-name"></span>
             </div>
 
             <div class="kpi-card">
                 <span class="kpi-label">Customer</span>
-                <span class="kpi-value">Campo Florida</span>
+                <span class="kpi-value" id="kpi-customer-name"></span>
+            </div>
+
+            <div class="kpi-card">
+                <span class="kpi-label">Date</span>
+                <span class="kpi-value" id="kpi-date"></span>
+            </div>
+
+            <div class="kpi-card">
+                <span class="kpi-label">Pull</span>
+                <span class="kpi-value" id="kpi-pull"></span>
             </div>
 
             <div class="kpi-card">
                 <span class="kpi-label"># Farm</span>
-                <span class="kpi-value">100</span>
+                <span class="kpi-value" id="kpi-num-farm"></span>
             </div>
 
             <div class="kpi-card">
-                <span class="kpi-label"># Of Beds</span>
-                <span class="kpi-value">120</span>
+                <span class="kpi-label">Num Of Beds</span>
+                <span class="kpi-value" id="kpi-planned-beds"></span>
             </div>
+            
 
             <div class="kpi-card">
                 <span class="kpi-label">Crew Leader</span>
-                <span class="kpi-value">Luis Hernández</span>
+                <span class="kpi-value" id="kpi-crew-leader-name"></span>
             </div>
 
             <div class="kpi-card">
                 <span class="kpi-label">Quality Checker</span>
-                <span class="kpi-value">Fernandoz</span>
+                <span class="kpi-value" id="kpi-quality-checker-name"></span>
             </div>
 
         </section>
@@ -180,276 +186,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Juan Morales Hernandez</td>
-                        <td>31</td>
-                        <td>4.5</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Rigoberto Mendez Gonzalez</td>
-                        <td>32</td>
-                        <td>4</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Ricardo Bello Andrade</td>
-                        <td>33</td>
-                        <td>4.5</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Joel Contreras Mendez</td>
-                        <td>34</td>
-                        <td>4</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Jacinto Mendez Lopez</td>
-                        <td>35</td>
-                        <td>4</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Maximiliano Hernandez Cano</td>
-                        <td>36</td>
-                        <td>4.5</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Ramon Gamino Seseña</td>
-                        <td>37</td>
-                        <td>4.5</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Adrian Bautista Gonzalez</td>
-                        <td>38</td>
-                        <td>4.5</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Salvador Gonzalez Lopez</td>
-                        <td>39</td>
-                        <td>4</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Elias Ramiro Rarmirez</td>
-                        <td>40</td>
-                        <td>5</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Pedro Manzanarez Mendoza</td>
-                        <td>41</td>
-                        <td>4</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Efren Mendez Elias</td>
-                        <td>42</td>
-                        <td>4</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Macario Hernandez Bautista</td>
-                        <td>43</td>
-                        <td>4</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Patricio Vazquez Lucas</td>
-                        <td>44</td>
-                        <td>4.5</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Eulogio Peralta Bermudez</td>
-                        <td>45</td>
-                        <td>4.5</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Antonio Gonzalez Rodriguez</td>
-                        <td>46</td>
-                        <td>4</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Edgar Mendez Apolinar</td>
-                        <td>47</td>
-                        <td>4.5</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Francisco Gonzalez Rodriguez</td>
-                        <td>48</td>
-                        <td>4</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Saul Tellez Mendez</td>
-                        <td>49</td>
-                        <td>4.5</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Rodolfo Espiritu Garcia</td>
-                        <td>50</td>
-                        <td>4</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Fernando Espiritu Vazquez</td>
-                        <td>51</td>
-                        <td>4.5</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Luis Enrique Picon Cazares</td>
-                        <td>52</td>
-                        <td>4</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Rigoberto Vazquez Lopez</td>
-                        <td>53</td>
-                        <td>4</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Gerardo Moreno Hernandez</td>
-                        <td>54</td>
-                        <td>4</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Ismael Moreno Perez</td>
-                        <td>55</td>
-                        <td>4</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Melquiadez Rodolfo Landero</td>
-                        <td>56</td>
-                        <td>4</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Apolinar Gonzalez Tellez</td>
-                        <td>57</td>
-                        <td>4.5</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Miguel Antonio Fernandez Perez</td>
-                        <td>58</td>
-                        <td>4</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Alejandro Ricañon Bello</td>
-                        <td>59</td>
-                        <td>4</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
-                    <tr>
-                        <td>Daniel Martinez Martinez</td>
-                        <td>60</td>
-                        <td>4.5</td>
-                        <td>6</td>
-                        <td>1st</td>
-                        <td>$95</td>
-                        <td style="color:var(--malachite-700); font-weight:600;">Approved</td>
-                    </tr>
+
                 </tbody>
             </table>
         </div>
@@ -457,5 +194,6 @@
 </div>
 
 <script type="module" src="scripts/sidebar.js"></script>
+<script type="module" src="scripts/reports.js"></script>
 </body>
 </html>

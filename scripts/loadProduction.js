@@ -142,9 +142,25 @@ async function loadProductionMatrix(workConsolidationId) {
         })
     );
 
-    renderProductionMatrix(
-        rowsData.filter(Boolean)
-    );
+    const sortedWorkers = rowsData
+        .filter(Boolean)
+        .sort((a, b) => {
+            const numA = parseInt(a.worker.employee_number) || 0;
+            const numB = parseInt(b.worker.employee_number) || 0;
+            return numA - numB;
+        });
+
+    renderProductionMatrix(sortedWorkers);
+}
+
+//UPDATE BONUS KPIS
+function updateBonusKpi() {
+
+    const totalBonus = productionMatrixData.reduce((sum, item) => {
+        return sum + (parseFloat(item.wp.bonus_assigned) || 0);
+    }, 0);
+
+    document.getElementById("kpi-bonuses").textContent = totalBonus;
 }
 
 /*=================================
@@ -155,6 +171,7 @@ function renderProductionMatrix(items) {
     tbody.innerHTML = "";
 
     productionMatrixData = items;
+    updateBonusKpi();
     items.forEach(({ worker, wp }) => {
         const tr = document.createElement("tr");
 
@@ -166,12 +183,12 @@ function renderProductionMatrix(items) {
                 <input 
                     type="number" 
                     class="bonus-input"
-                    value="0"
+                    value="${wp.bonus_assigned ?? 0}"
                     step="0.5"
                     data-worker-production-id="${wp.worker_production_id}"
                 >
             </td>
-            <td class="total-beds">0</td>
+            <td class="total-beds">${(wp.beds_assigned ?? 0) + (wp.bonus_assigned ?? 0)}</td>
             <td>
                 <span class="${worker.active ? "status-active" : "status-inactive"}">
                     ${worker.active ? "Active" : "Inactive"}
@@ -184,20 +201,44 @@ function renderProductionMatrix(items) {
     const bonusInputs = document.querySelectorAll(".bonus-input");
 
     bonusInputs.forEach(input => {
-        input.addEventListener("input", () => {
-            const row = input.closest("tr");
+    input.addEventListener("input", async () => {
+        const row = input.closest("tr");
+        const workerProductionId = input.dataset.workerProductionId;
+        const item = productionMatrixData.find(
+            i => i.wp.worker_production_id === workerProductionId
+        );
 
-            const bedsAssigned = parseFloat(
-                row.children[2].textContent
-            ) || 0;
+        if (!item) return;
 
-            const bonus = parseFloat(input.value) || 0;
+        const bonus = parseFloat(input.value) || 0;
+        const bedsAssigned = item.wp.beds_assigned || 0;
+        const totalBeds = bedsAssigned + bonus;
 
-            const totalCell = row.querySelector(".total-beds");
+        // Actualiza UI
+        const totalCell = row.querySelector(".total-beds");
+        totalCell.textContent = totalBeds;
 
-            totalCell.textContent = bedsAssigned + bonus;
-        });
+        // Actualiza datos en memoria
+        item.wp.bonus_assigned = bonus;
+        item.wp.total_beds = totalBeds;
+
+        try {
+            // Persiste cambios en backend
+            await patchJson(`/worker-productions/${workerProductionId}`, {
+                bedsAssigned: bedsAssigned,
+                bonusAssigned: bonus,
+                totalBeds: totalBeds,
+                workerId: item.worker.person_id,
+                productionId: item.wp.production_id
+            });
+        } catch (error) {
+            console.error("Error saving bonus:", error);
+        }
+
+        updateBonusKpi();
     });
+});
+
 }
 
 /*=================================================
@@ -245,25 +286,35 @@ async function applyChangesFromModal() {
 
     try {
 
+        const rows = document.querySelectorAll("#productionMatrixBody tr");
+
         for (let i = 0; i < productionMatrixData.length; i++) {
 
             const item = productionMatrixData[i];
+            const row = rows[i];
+
+            const bonusInput = row.querySelector(".bonus-input");
+            const bonus = parseFloat(bonusInput?.value) || 0;
+
+            const bedsAssigned = !isNaN(newBedsAssigned)
+                ? newBedsAssigned
+                : item.wp.beds_assigned;
+
+            const totalBeds = bedsAssigned + bonus;
 
             // ===============================
-            // UPDATE BEDS_ASSIGNED (ALL WORKERS)
+            // UPDATE WORKER PRODUCTION
             // ===============================
-            if (!isNaN(newBedsAssigned)) {
-
-                await patchJson(
-                    `/worker-productions/${item.wp.worker_production_id}`,
-                    {
-                        bedsAssigned: newBedsAssigned,
-                        bonusApplied: item.wp.bonus_applied ?? false,
-                        workerId: item.worker.person_id,   // ✅ CORRECTO
-                        productionId: item.wp.production_id
-                    }
-                );
-            }
+            await patchJson(
+                `/worker-productions/${item.wp.worker_production_id}`,
+                {
+                    bedsAssigned: bedsAssigned,
+                    bonusAssigned: bonus,
+                    totalBeds: totalBeds,
+                    workerId: item.worker.person_id,
+                    productionId: item.wp.production_id
+                }
+            );
 
             // ===============================
             // UPDATE EMPLOYEE NUMBER (SEQUENCE)
@@ -276,7 +327,7 @@ async function applyChangesFromModal() {
                         firstName: item.worker.first_name,
                         lastName: item.worker.last_name,
                         active: item.worker.active,
-                        employeeNumber: String(newStartingNumber + i), // 👈 importante string
+                        employeeNumber: String(newStartingNumber + i),
                         skillLevel: item.worker.skill_level,
                         hourlyRate: item.worker.hourly_rate
                     }

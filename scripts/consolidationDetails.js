@@ -253,7 +253,8 @@ document.getElementById("confirmAddWorkersBtn")
                     productionId: productionId,
                     workerId: workerId,
                     bedsAssigned: 0,
-                    bonusApplied: false
+                    bonusAssigned: 0,
+                    totalBeds: 0
                 })
             });
         }
@@ -281,4 +282,17 @@ if (goToProductionBtn) {
         }
         window.location.href = `production.html?production_id=${work_consolidation_id}`;
     });
+}
+
+//GO TO REPORTS
+const goToReportBtn = document.getElementById("goToReports");
+
+if(goToReportBtn){
+    goToReportBtn.addEventListener("click", () =>{
+        if(!work_consolidation_id){
+            alert("Work consolidation ID not found");
+            return;
+        }
+        window.location.href = `reports.html?production_report_id=${work_consolidation_id}`
+    })
 }
