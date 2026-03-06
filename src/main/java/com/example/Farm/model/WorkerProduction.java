@@ -28,8 +28,13 @@ public class WorkerProduction {
     @Column(name = "beds_assigned", nullable = false)
     private Double bedsAssigned;
 
-    @Column(name = "bonus_applied", nullable = false)
-    private Boolean bonusApplied;
+    //Este es nuevo
+    @Column(name = "bonus_assigned", nullable = false)
+    private Double bonusAssigned;
+
+    //Este es nuevo
+    @Column(name = "total_beds", nullable = false)
+    private Double totalBeds;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "worker_id", nullable = true)

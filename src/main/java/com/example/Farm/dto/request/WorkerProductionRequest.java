@@ -11,9 +11,12 @@ public class WorkerProductionRequest {
     private Double bedsAssigned;
 
     @NotNull
-    private Boolean bonusApplied;
+    private Double bonusAssigned;
 
     private UUID workerId;
+
+    @NotNull
+    private Double totalBeds;
 
     @NotNull
     private UUID productionId;

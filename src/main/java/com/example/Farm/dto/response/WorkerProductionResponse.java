@@ -19,8 +19,11 @@ public class WorkerProductionResponse {
     @JsonProperty("beds_assigned")
     private Double bedsAssigned;
 
-    @JsonProperty("bonus_applied")
-    private Boolean bonusApplied;
+    @JsonProperty("bonus_assigned")
+    private Double bonusAssigned;
+
+    @JsonProperty("total_beds")
+    private Double totalBeds;
 
     @JsonProperty("worker_id")
     private UUID workerId;

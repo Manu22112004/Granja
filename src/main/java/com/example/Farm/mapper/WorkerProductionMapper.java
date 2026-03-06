@@ -15,7 +15,8 @@ public final class WorkerProductionMapper {
         return WorkerProductionResponse.builder()
                 .workerProductionId(wp.getWorkerProductionId())
                 .bedsAssigned(wp.getBedsAssigned())
-                .bonusApplied(wp.getBonusApplied())
+                .bonusAssigned(wp.getBonusAssigned())
+                .totalBeds(wp.getTotalBeds())
                 .workerId(
                     wp.getWorker() != null
                             ? wp.getWorker().getPersonId()
@@ -48,6 +49,7 @@ public final class WorkerProductionMapper {
 
     private static void apply(WorkerProductionRequest request, WorkerProduction wp) {
         if (request.getBedsAssigned() != null) wp.setBedsAssigned(request.getBedsAssigned());
-        if (request.getBonusApplied() != null) wp.setBonusApplied(request.getBonusApplied());
+        if (request.getBonusAssigned() != null) wp.setBonusAssigned(request.getBonusAssigned());
+        if (request.getTotalBeds() != null) wp.setTotalBeds(request.getTotalBeds());
     }
 }
