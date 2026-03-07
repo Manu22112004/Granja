@@ -1,5 +1,6 @@
 import { API_BASE_URL } from "./config.js"
 
+let reportsData = []
 //  UTILS
 async function fetchJson(endpoint) {
     const response = await fetch(`${API_BASE_URL}${endpoint}`);
@@ -41,6 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
         await loadReportKpis(workConsolidationId);
+        await loadReports(workConsolidationId)
     } catch (error) {
         console.error("Error loading reports data:", error);
         alert("Error loading reports data");
@@ -95,3 +97,96 @@ async function loadReportKpis(workConsolidationId) {
     document.getElementById("kpi-quality-checker-name").textContent =
         `${qualityChecker.first_name} ${qualityChecker.last_name}` ?? "—";
 }
+
+//  CARGAR DATOS EN LA TABLA
+async function loadReports(workConsolidationId) {
+    const consolidation = await fetchJson(
+        `/work-consolidations/${workConsolidationId}`
+    )
+
+    if(!consolidation.production_report_id) return
+
+    const report = await fetchJson(
+        `/production-reports/${consolidation.production_report_id}`
+    )
+
+    if(!report.production_report_id) return;
+
+    const production = await fetchJson(
+        `/productions/${consolidation.production_id}`
+    );
+
+    if(!production.production_id) return;
+
+    const workerProductionIds = production.workerProductions || [];
+
+    const tbody = document.getElementById("reportsTableBody")
+    tbody.innerHTML=""
+
+    if(workerProductionIds.length === 0){
+        tbody.innerHTML = 
+            `<tr><td colspan="6">No workers assigned</td></tr>`
+        return
+    }
+
+    const workerProductions = await Promise.all(
+        workerProductionIds.map(id => 
+            fetchJson(`/worker-productions/${id}`)
+        )
+    )
+
+    const rowsData = await Promise.all(
+        workerProductions.map(async wp =>{
+            if(!wp.worker_id) return null
+            const worker = await fetchJson(`/workers/${wp.worker_id}`)
+            return {worker, wp}
+        })
+    )
+
+    const sortedWorkers = rowsData
+        .filter(Boolean)
+        .sort((a,b) => {
+            const numA = parseInt(a.worker.employee_number) || 0
+            const numB = parseInt(b.worker.employee_number) || 0
+            return numA - numB
+        })
+    
+    renderReports(sortedWorkers);
+}
+
+function renderReports(items){
+    const tbody = document.getElementById("reportsTableBody")
+    tbody.innerHTML = ""
+
+    reportsData = items;
+    items.forEach(({worker,wp}) => {
+        const tr = document.createElement("tr")
+
+        const initials = "" + String(worker.first_name).charAt(0).toUpperCase() + String(worker.last_name).charAt(0).toUpperCase()
+
+        tr.innerHTML = `
+            <td>${worker.first_name} ${worker.last_name}</td>
+            <td>${worker.employee_number}</td>
+            <td>${wp.total_beds}</td>
+            <td>${initials}</td>
+        `
+
+        tbody.appendChild(tr);
+    })
+}
+
+//export
+import { convertReportToPDF } from "../utils/convertjspdf.js";
+
+document.getElementById("btnExport").addEventListener("click", () => {
+    convertReportToPDF("reportTable"
+        ,"kpi-company-name"
+        ,"kpi-date"
+        ,"kpi-pull"
+        ,"kpi-customer-name"
+        ,"kpi-num-farm"
+        ,"kpi-planned-beds"
+        ,"kpi-crew-leader-name"
+        ,"kpi-quality-checker-name"
+    );
+});

@@ -173,20 +173,19 @@
         <div class="dashboard-card">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <h3>📋 Report Details</h3>
-                <button class="logout-btn">Export</button>
+                <button class="logout-btn" id="btnExport">Export</button>
             </div>
 
-            <table style="width:100%; border-collapse:collapse; margin-top:12px;">
+            <table id="reportTable" style="width:100%; border-collapse:collapse; margin-top:12px;">
                 <thead>
                     <tr style="text-align:left; font-size:13px; color:var(--malachite-700);">
                         <th>Employee Name</th>
-                        <th>Employee</th>
+                        <th>Num</th>
                         <th># Of Beds Completed</th>
                         <th>Employee Initials</th>
                     </tr>
                 </thead>
-                <tbody>
-
+                <tbody id="reportsTableBody">
                 </tbody>
             </table>
         </div>
@@ -195,5 +194,6 @@
 
 <script type="module" src="scripts/sidebar.js"></script>
 <script type="module" src="scripts/reports.js"></script>
+
 </body>
 </html>
