@@ -52,14 +52,28 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://127.0.0.1:5500"));
-        config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS","PATCH"));
+
+        config.setAllowedOrigins(List.of(
+            "http://127.0.0.1:5500",
+            "https://granja-front-n2go.onrender.com"
+        ));
+
+        config.setAllowedMethods(List.of(
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE",
+            "OPTIONS",
+            "PATCH"
+        ));
+
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(false);
 
         UrlBasedCorsConfigurationSource source =
             new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", config);
+        
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
 
