@@ -20,14 +20,14 @@ public class ProductionReportResponse {
     @JsonProperty("report_date")
     private LocalDate reportDate;
 
-    @JsonProperty("pull_type")
-    private String pullType;
+    // @JsonProperty("pull_type")
+    // private String pullType;
 
-    @JsonProperty("number_of_farms")
-    private Integer numberOfFarms;
+    // @JsonProperty("number_of_farms")
+    // private Integer numberOfFarms;
 
-    @JsonProperty("total_beds")
-    private Double totalBeds;
+    // @JsonProperty("total_beds")
+    // private Double totalBeds;
 
     @JsonProperty("work_consolidation_id")
     private UUID workConsolidationId;

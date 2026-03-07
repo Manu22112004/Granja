@@ -27,17 +27,17 @@ public class ProductionReport {
     @Column(name = "production_report_id", nullable = false, updatable = false)
     private UUID productionReportId;
 
-    @Column(name = "report_date", nullable = false)
+    @Column(name = "report_date", nullable = true)
     private LocalDate reportDate;
 
-    @Column(name = "pull_type", nullable = false, length = 20)
-    private String pullType;
+    // @Column(name = "pull_type", nullable = false, length = 20)
+    // private String pullType;
 
-    @Column(name = "number_of_farms", nullable = false)
-    private Integer numberOfFarms;
+    // @Column(name = "number_of_farms", nullable = false)
+    // private Integer numberOfFarms;
 
-    @Column(name = "total_beds", nullable = false)
-    private Double totalBeds;
+    // @Column(name = "total_beds", nullable = false)
+    // private Double totalBeds;
 
     @OneToMany(mappedBy = "productionReport", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReportEmployeeEntry> employeeEntries;

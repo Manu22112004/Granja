@@ -15,9 +15,9 @@ public final class ProductionReportMapper {
         return ProductionReportResponse.builder()
                 .productionReportId(report.getProductionReportId())
                 .reportDate(report.getReportDate())
-                .pullType(report.getPullType())
-                .numberOfFarms(report.getNumberOfFarms())
-                .totalBeds(report.getTotalBeds())
+                // .pullType(report.getPullType())
+                // .numberOfFarms(report.getNumberOfFarms())
+                // .totalBeds(report.getTotalBeds())
                 .workConsolidationId(
                         report.getWorkConsolidation() != null
                                 ? report.getWorkConsolidation().getWorkConsolidationId()
@@ -45,8 +45,8 @@ public final class ProductionReportMapper {
 
     private static void apply(ProductionReportRequest request, ProductionReport report) {
         if (request.getReportDate() != null) report.setReportDate(request.getReportDate());
-        if (request.getPullType() != null) report.setPullType(request.getPullType());
-        if (request.getNumberOfFarms() != null) report.setNumberOfFarms(request.getNumberOfFarms());
-        if (request.getTotalBeds() != null) report.setTotalBeds(request.getTotalBeds());
+        // if (request.getPullType() != null) report.setPullType(request.getPullType());
+        // if (request.getNumberOfFarms() != null) report.setNumberOfFarms(request.getNumberOfFarms());
+        // if (request.getTotalBeds() != null) report.setTotalBeds(request.getTotalBeds());
     }
 }

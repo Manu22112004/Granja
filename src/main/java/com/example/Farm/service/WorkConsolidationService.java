@@ -134,6 +134,14 @@ public class WorkConsolidationService {
         pricingPolicy = pricingPolicyRepository.save(pricingPolicy);
         savedConsolidation.setPricingPolicy(pricingPolicy);
 
+        //===========================
+        // CREAR REPORTS
+        ProductionReport report = new ProductionReport();
+        report.setWorkConsolidation(savedConsolidation);
+
+        report = productionReportRepository.save(report);
+        savedConsolidation.setProductionReport(report);
+
         // =========================
         // 4️⃣ Guardar relación final
         // =========================
